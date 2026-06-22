@@ -1,0 +1,1323 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * DlgLhtBiaya.java
+ *
+ * Created on 12 Jul 10, 16:21:34
+ */
+
+package laporan;
+
+import fungsi.WarnaTable;
+import fungsi.batasInput;
+import fungsi.koneksiDB;
+import fungsi.sekuel;
+import fungsi.validasi;
+import fungsi.akses;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
+/**
+ *
+ * @author perpustakaan
+ */
+public final class DlgRl32 extends javax.swing.JDialog {
+    private final DefaultTableModel tabMode;
+    private Connection koneksi=koneksiDB.condb();
+    private sekuel Sequel=new sekuel();
+    private validasi Valid=new validasi();
+    private PreparedStatement ps,ps2;
+    private ResultSet rs,rs2;
+    private int i=0,awalbh=0,awalbhicu=0,awalbhhcu=0,awalbhnicu=0,awalbhpicu=0,awalbhperi=0,
+            masuk=0,masukicu=0,masukhcu=0,masuknicu=0,masukpicu=0,masukperi=0,
+            keluar=0,keluaricu=0,keluarhcu=0,keluarnicu=0,keluarpicu=0,keluarperi=0,
+            matik48l=0,matiicuk48l=0,matihcuk48l=0,matinicuk48l=0,matipicuk48l=0,matiperik48l=0,
+            matik48p=0,matiicuk48p=0,matihcuk48p=0,matinicuk48p=0,matipicuk48p=0,matiperik48p=0,
+            matil48l=0,matiicul48l=0,matihcul48l=0,matinicul48l=0,matipicul48l=0,matiperil48l=0,
+            matil48p=0,matiicul48p=0,matihcul48p=0,matinicul48p=0,matipicul48p=0,matiperil48p=0,
+            lamarawat=0,lamarawaticu=0,lamarawathcu=0,lamarawatnicu=0,lamarawatpicu=0,lamarawatperi=0,
+            akhirbh=0,akhirbhicu=0,akhirbhhcu=0,akhirbhnicu=0,akhirbhpicu=0,akhirbhperi=0,
+            harirawat=0,harirawaticu=0,harirawathcu=0,harirawatnicu=0,harirawatpicu=0,harirawatperi=0,
+            vvip=0,vip=0,I=0,II=0,III=0,
+            khususicu=0,khusushcu=0,khususnicu=0,khususpicu=0,khususperi=0,
+            ttlawalbh=0,ttlmasuk=0,ttlkeluar=0,ttlmatik48l=0,ttlmatil48l=0,ttllamarawat=0,
+            ttlakhirbh=0,ttlharirawat=0,ttlvvip=0,ttlvip=0,ttlI=0,ttlII=0,ttlIII=0,ttlkhusus=0,
+            ttlmatik48p=0,ttlmatil48p=0;   
+    /** Creates new form DlgLhtBiaya
+     * @param parent
+     * @param modal */
+    public DlgRl32(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        this.setLocation(8,1);
+        setSize(885,674);
+
+        Object[] rowRwJlDr={"No.","Jenis Pelayanan","Awal Bulan","Pasien Masuk","Pasien Keluar Hidup","Keluar Mati<48 Jam (L)","Keluar Mati<48 Jam (P)",
+            "Keluar Mati>=48 Jam (L)","Keluar Mati>=48 Jam (P)","Lama Dirawat","Akhir Bulan","Hari Perawatan","VVIP","VIP","I","II","III","Khusus"};
+        tabMode=new DefaultTableModel(null,rowRwJlDr){
+              @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
+        };
+        tbBangsal.setModel(tabMode);
+        //tbBangsal.setDefaultRenderer(Object.class, new WarnaTable(jPanel2.getBackground(),tbBangsal.getBackground()));
+        tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
+        tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        for (i = 0; i < 11; i++) {
+            TableColumn column = tbBangsal.getColumnModel().getColumn(i);
+            if(i==0){
+                column.setPreferredWidth(25);
+            }else if(i==1){
+                column.setPreferredWidth(200);
+            }else if(i==4){
+                column.setPreferredWidth(150);
+            }else if(i==5){
+                column.setPreferredWidth(150);
+            }else if(i==6){
+                column.setPreferredWidth(150);
+            }else if(i==7){
+                column.setPreferredWidth(150);
+            }else if(i==8){
+                column.setPreferredWidth(150);
+            }else{
+                column.setPreferredWidth(80);
+            }
+        }
+        tbBangsal.setDefaultRenderer(Object.class, new WarnaTable());
+
+        TCari.setDocument(new batasInput((byte)100).getKata(TCari));
+                   
+
+        
+        try {
+            ps=koneksi.prepareStatement(
+                    "SELECT s.nm_sps FROM spesialis s WHERE s.nm_sps not in ('-','Umum')");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        try {
+            ps2=koneksi.prepareStatement(
+                    "SELECT k.nm_kelas FROM kelas k WHERE k.nm_kelas IN ('ICU', 'PICU', 'NICU', 'HCU')");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }    
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        internalFrame1 = new widget.InternalFrame();
+        Scroll = new widget.ScrollPane();
+        tbBangsal = new widget.Table();
+        panelGlass5 = new widget.panelisi();
+        label11 = new widget.Label();
+        Tgl1 = new widget.Tanggal();
+        label18 = new widget.Label();
+        Tgl2 = new widget.Tanggal();
+        jLabel6 = new widget.Label();
+        TCari = new widget.TextBox();
+        BtnCari = new widget.Button();
+        BtnAll = new widget.Button();
+        jLabel7 = new widget.Label();
+        BtnPrint = new widget.Button();
+        BtnKeluar = new widget.Button();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ RL 3.2 Rawat Inap ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(50, 50, 50))); // NOI18N
+        internalFrame1.setName("internalFrame1"); // NOI18N
+        internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
+
+        Scroll.setName("Scroll"); // NOI18N
+        Scroll.setOpaque(true);
+
+        tbBangsal.setName("tbBangsal"); // NOI18N
+        Scroll.setViewportView(tbBangsal);
+
+        internalFrame1.add(Scroll, java.awt.BorderLayout.CENTER);
+
+        panelGlass5.setName("panelGlass5"); // NOI18N
+        panelGlass5.setPreferredSize(new java.awt.Dimension(55, 55));
+        panelGlass5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 9));
+
+        label11.setText("Tanggal :");
+        label11.setName("label11"); // NOI18N
+        label11.setPreferredSize(new java.awt.Dimension(50, 23));
+        panelGlass5.add(label11);
+
+        Tgl1.setDisplayFormat("dd-MM-yyyy");
+        Tgl1.setName("Tgl1"); // NOI18N
+        Tgl1.setPreferredSize(new java.awt.Dimension(90, 23));
+        panelGlass5.add(Tgl1);
+
+        label18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        label18.setText("s.d.");
+        label18.setName("label18"); // NOI18N
+        label18.setPreferredSize(new java.awt.Dimension(25, 23));
+        panelGlass5.add(label18);
+
+        Tgl2.setDisplayFormat("dd-MM-yyyy");
+        Tgl2.setName("Tgl2"); // NOI18N
+        Tgl2.setPreferredSize(new java.awt.Dimension(90, 23));
+        panelGlass5.add(Tgl2);
+
+        jLabel6.setText("Key Word :");
+        jLabel6.setName("jLabel6"); // NOI18N
+        jLabel6.setPreferredSize(new java.awt.Dimension(60, 23));
+        panelGlass5.add(jLabel6);
+
+        TCari.setEditable(false);
+        TCari.setName("TCari"); // NOI18N
+        TCari.setPreferredSize(new java.awt.Dimension(155, 23));
+        TCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                TCariKeyPressed(evt);
+            }
+        });
+        panelGlass5.add(TCari);
+
+        BtnCari.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
+        BtnCari.setMnemonic('2');
+        BtnCari.setToolTipText("Alt+2");
+        BtnCari.setName("BtnCari"); // NOI18N
+        BtnCari.setPreferredSize(new java.awt.Dimension(28, 23));
+        BtnCari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCariActionPerformed(evt);
+            }
+        });
+        BtnCari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnCariKeyPressed(evt);
+            }
+        });
+        panelGlass5.add(BtnCari);
+
+        BtnAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/Search-16x16.png"))); // NOI18N
+        BtnAll.setMnemonic('M');
+        BtnAll.setToolTipText("Alt+M");
+        BtnAll.setName("BtnAll"); // NOI18N
+        BtnAll.setPreferredSize(new java.awt.Dimension(28, 23));
+        BtnAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAllActionPerformed(evt);
+            }
+        });
+        BtnAll.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnAllKeyPressed(evt);
+            }
+        });
+        panelGlass5.add(BtnAll);
+
+        jLabel7.setName("jLabel7"); // NOI18N
+        jLabel7.setPreferredSize(new java.awt.Dimension(30, 23));
+        panelGlass5.add(jLabel7);
+
+        BtnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/b_print.png"))); // NOI18N
+        BtnPrint.setMnemonic('T');
+        BtnPrint.setText("Cetak");
+        BtnPrint.setToolTipText("Alt+T");
+        BtnPrint.setName("BtnPrint"); // NOI18N
+        BtnPrint.setPreferredSize(new java.awt.Dimension(100, 30));
+        BtnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPrintActionPerformed(evt);
+            }
+        });
+        BtnPrint.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnPrintKeyPressed(evt);
+            }
+        });
+        panelGlass5.add(BtnPrint);
+
+        BtnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/exit.png"))); // NOI18N
+        BtnKeluar.setMnemonic('K');
+        BtnKeluar.setText("Keluar");
+        BtnKeluar.setToolTipText("Alt+K");
+        BtnKeluar.setName("BtnKeluar"); // NOI18N
+        BtnKeluar.setPreferredSize(new java.awt.Dimension(100, 30));
+        BtnKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnKeluarActionPerformed(evt);
+            }
+        });
+        BtnKeluar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnKeluarKeyPressed(evt);
+            }
+        });
+        panelGlass5.add(BtnKeluar);
+
+        internalFrame1.add(panelGlass5, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(internalFrame1, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void BtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPrintActionPerformed
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, data sudah habis. Tidak ada data yang bisa anda print...!!!!");
+            //TCari.requestFocus();
+        }else if(tabMode.getRowCount()!=0){
+            
+            Map<String, Object> param = new HashMap<>();         
+            param.put("namars",akses.getnamars());
+            param.put("alamatrs",akses.getalamatrs());
+            param.put("kotars",akses.getkabupatenrs());
+            param.put("propinsirs",akses.getpropinsirs());
+            param.put("kontakrs",akses.getkontakrs());
+            param.put("emailrs",akses.getemailrs());   
+            param.put("periode",Tgl1.getSelectedItem()+" s.d. "+Tgl2.getSelectedItem());  
+            param.put("tanggal",Tgl2.getDate());  
+            param.put("logo",Sequel.cariGambar("select setting.logo from setting"));  
+            Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
+            for(int r=0;r<tabMode.getRowCount();r++){ 
+                if(!tbBangsal.getValueAt(r,0).toString().contains(">>")){
+                    Sequel.menyimpan("temporary","'"+r+"','"+
+                                    tabMode.getValueAt(r,0).toString()+"','"+
+                                    tabMode.getValueAt(r,1).toString()+"','"+
+                                    tabMode.getValueAt(r,2).toString()+"','"+
+                                    tabMode.getValueAt(r,3).toString()+"','"+
+                                    tabMode.getValueAt(r,4).toString()+"','"+
+                                    tabMode.getValueAt(r,5).toString()+"','"+
+                                    tabMode.getValueAt(r,6).toString()+"','"+
+                                    tabMode.getValueAt(r,7).toString()+"','"+
+                                    tabMode.getValueAt(r,8).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
+                }                    
+            }
+               
+            Valid.MyReportqry("rptRl32.jasper","report","::[ Formulir RL 3.2 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+        }
+        this.setCursor(Cursor.getDefaultCursor());
+}//GEN-LAST:event_BtnPrintActionPerformed
+
+    private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnPrintKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+            BtnPrintActionPerformed(null);
+        }else{
+            //Valid.pindah(evt, BtnHapus, BtnAll);
+        }
+}//GEN-LAST:event_BtnPrintKeyPressed
+
+    private void BtnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnKeluarActionPerformed
+        dispose();
+}//GEN-LAST:event_BtnKeluarActionPerformed
+
+    private void BtnKeluarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnKeluarKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+            dispose();
+        }else{Valid.pindah(evt,BtnKeluar,TCari);}
+}//GEN-LAST:event_BtnKeluarKeyPressed
+
+private void BtnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCariActionPerformed
+       tampil();
+}//GEN-LAST:event_BtnCariActionPerformed
+
+private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnCariKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+            tampil();
+            this.setCursor(Cursor.getDefaultCursor());
+        }else{
+            Valid.pindah(evt, TCari, BtnPrint);
+        }
+}//GEN-LAST:event_BtnCariKeyPressed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        tampil();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void TCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TCariKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            BtnCariActionPerformed(null);
+        }else if(evt.getKeyCode()==KeyEvent.VK_PAGE_DOWN){
+            BtnCari.requestFocus();
+        }else if(evt.getKeyCode()==KeyEvent.VK_PAGE_UP){
+            BtnKeluar.requestFocus();
+        }
+    }//GEN-LAST:event_TCariKeyPressed
+
+    private void BtnAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAllActionPerformed
+           TCari.setText("");
+           tampil();
+    }//GEN-LAST:event_BtnAllActionPerformed
+
+    private void BtnAllKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnAllKeyPressed
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+            BtnAllActionPerformed(null);
+        }else{
+            
+        }
+    }//GEN-LAST:event_BtnAllKeyPressed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        tampil();
+
+    }//GEN-LAST:event_formWindowActivated
+
+    /**
+    * @param args the command line arguments
+    */
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(() -> {
+            DlgRl32 dialog = new DlgRl32(new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private widget.Button BtnAll;
+    private widget.Button BtnCari;
+    private widget.Button BtnKeluar;
+    private widget.Button BtnPrint;
+    private widget.ScrollPane Scroll;
+    private widget.TextBox TCari;
+    private widget.Tanggal Tgl1;
+    private widget.Tanggal Tgl2;
+    private widget.InternalFrame internalFrame1;
+    private widget.Label jLabel6;
+    private widget.Label jLabel7;
+    private widget.Label label11;
+    private widget.Label label18;
+    private widget.panelisi panelGlass5;
+    private widget.Table tbBangsal;
+    // End of variables declaration//GEN-END:variables
+
+    public void tampil(){        
+        try{   
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+            Valid.tabelKosong(tabMode);   
+//            ps.setString(1,"%"+TCari.getText().trim()+"%");
+            rs=ps.executeQuery();
+            i=1;
+            awalbh=0;awalbhicu=0;awalbhhcu=0;awalbhnicu=0;awalbhpicu=0;awalbhperi=0;
+            masuk=0;masukicu=0;masukhcu=0;masuknicu=0;masukpicu=0;masukperi=0;
+            keluar=0;keluaricu=0;keluarhcu=0;keluarnicu=0;keluarpicu=0;keluarperi=0;
+            matik48l=0;matiicuk48l=0;matihcuk48l=0;matinicuk48l=0;matipicuk48l=0;matiperik48l=0;
+            matik48p=0;matiicuk48p=0;matihcuk48p=0;matinicuk48p=0;matipicuk48p=0;matiperik48p=0;
+            matil48l=0;matiicul48l=0;matihcul48l=0;matinicul48l=0;matipicul48l=0;matiperil48l=0;
+            matil48p=0;matiicul48p=0;matihcul48p=0;matinicul48p=0;matipicul48p=0;matiperil48p=0;
+            lamarawat=0;lamarawaticu=0;lamarawathcu=0;lamarawatnicu=0;lamarawatpicu=0;lamarawatperi=0;
+            akhirbh=0;harirawat=0;vvip=0;vip=0;III=0;II=0;I=0;
+            khususicu=0;khusushcu=0;khususnicu=0;khususpicu=0;khususperi=0;
+            ttlawalbh=0;ttlmasuk=0;ttlkeluar=0;ttlmatik48l=0;ttlmatil48l=0;
+            ttllamarawat=0;ttlakhirbh=0;ttlharirawat=0;ttlvvip=0;ttlvip=0;
+            ttlI=0;ttlII=0;ttlIII=0;ttlkhusus=0;
+            ttlmatik48p=0;ttlmatil48p=0;
+//            while(rs.next()){
+//                
+////                ttlIII=ttlIII+III;
+//                                
+////                tabMode.addRow(new Object[]{
+////                    i,rs.getString("nm_sps"),"0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0"
+////                });
+////                i++;
+//            }
+
+                awalbh=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal NOT LIKE 'KS%' \n" +
+                        "AND b.nm_bangsal NOT LIKE 'HCU%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%ICU%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%Bayi%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%Perinatologi%'");
+                awalbhicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'ICU%'");
+                awalbhhcu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'HCU%'");
+                awalbhnicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'NICU%'");
+                awalbhpicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'PICU%'");
+                awalbhperi=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl1.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'Perinatologi%'");
+                ttlawalbh=awalbh+awalbhicu+awalbhhcu+awalbhnicu+awalbhpicu;
+//                ttlawalbh=ttlawalbh+awalbh;
+                
+                masuk=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND rp.status_lanjut ='Ranap' "+
+                        "and b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%'");
+                masukicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'ICU%'");
+                masukhcu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'HCU%'");
+                masuknicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'NICU%'");
+                masukpicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'PICU%'");
+                masukperi=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_masuk between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'Perinatologi%'");
+                ttlmasuk=masuk+masukicu+masukhcu+masuknicu+masukpicu+masukperi;
+//                ttlmasuk=ttlmasuk+masuk;
+                
+                keluar=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND rp.status_lanjut ='Ranap' "
+                        + "and b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                keluaricu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'ICU%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                keluarhcu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'HCU%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                keluarnicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'NICU%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                keluarpicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'PICU%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                keluarperi=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) " +
+                        "from reg_periksa rp " +
+                        "inner join kamar_inap ki on ki.no_rawat =rp.no_rawat " +
+                        "INNER JOIN kamar k on k.kd_kamar =ki.kd_kamar "+
+                        "INNER join bangsal b on b.kd_bangsal = k.kd_bangsal "+
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat " +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter " +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "WHERE ki.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND b.nm_bangsal LIKE 'Perinatologi%' "
+                        + "and ki.stts_pulang not in ('Meninggal','Pindah Kamar','-')");
+                ttlkeluar=keluar+keluaricu+keluarhcu+keluarnicu+keluarpicu+keluarperi;
+//                ttlkeluar=ttlkeluar+keluar;
+                
+                matik48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matiicuk48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'ICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matihcuk48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'HCU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matinicuk48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'NICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matipicuk48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'PICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matiperik48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                ttlmatik48l=matik48l+matiicuk48l+matihcuk48l+matinicuk48l+matipicuk48l+matiperik48l;
+//                ttlmatik48l=ttlmatik48l+matik48l;
+                
+                matik48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "  AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "  TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matiicuk48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'ICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matihcuk48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'HCU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matinicuk48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'NICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matipicuk48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'PICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                matiperik48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) < 48");
+                ttlmatik48p=matik48p+matiicuk48p+matihcuk48p+matinicuk48p+matiperik48p;
+//                ttlmatik48p=ttlmatik48p+matik48p;
+                
+                matil48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "  AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "  TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matiicul48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'ICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matihcul48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'HCU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matinicul48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'NICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matipicul48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'PICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matiperil48l=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='L' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                ttlmatil48l=matil48l+matiicul48l+matihcul48l+matinicul48l+matipicul48l+matiperil48l;
+//                ttlmatil48l=ttlmatil48l+matil48l;
+                
+                matil48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "  AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "  TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matiicul48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'ICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matihcul48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'HCU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matinicul48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'NICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matipicul48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'PICU%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                matiperil48p=Sequel.cariInteger("SELECT COUNT(rp.no_rawat) \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps " +
+                        "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%' \n" +
+                        "AND ki.stts_pulang = 'Meninggal' AND ki.tgl_masuk BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and p.jk='P' and \n" +
+                        "TIMESTAMPDIFF(HOUR, CONCAT(rp.tgl_registrasi, \" \", rp.jam_reg), CONCAT(ki.tgl_keluar, \" \", ki.jam_keluar)) >= 48");
+                ttlmatil48p=matil48p+matiicul48p+matihcul48p+matinicul48p+matipicul48p+matiperil48p;
+//                ttlmatil48p=ttlmatil48p+matil48p;
+                
+                lamarawat=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND ki.stts_pulang <> 'Pindah Kamar' AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                lamarawaticu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'ICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                lamarawathcu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'HCU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                lamarawatnicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'NICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                lamarawatpicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'PICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                lamarawatperi=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                ttllamarawat=lamarawat+lamarawaticu+lamarawathcu+lamarawatnicu+lamarawatpicu+lamarawatperi;
+//                ttllamarawat=ttllamarawat+lamarawat;
+                
+                akhirbh=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal NOT LIKE 'KS%' \n" +
+                        "AND b.nm_bangsal NOT LIKE 'HCU%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%ICU%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%Bayi%' \n" +
+                        "AND b.nm_bangsal NOT LIKE '%Perinatologi%'");
+                akhirbhicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'ICU%'");
+                akhirbhhcu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'HCU%'");
+                akhirbhnicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'NICU%'");
+                akhirbhpicu=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'PICU%'");
+                akhirbhperi=Sequel.cariInteger("SELECT COUNT(DISTINCT rp.no_rawat) \n" +
+                        "FROM reg_periksa rp \n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat \n" +
+                        "LEFT JOIN dpjp_ranap dr ON dr.no_rawat = ki.no_rawat \n" +
+                        "INNER JOIN dokter d ON d.kd_dokter = dr.kd_dokter \n" +
+                        "INNER JOIN spesialis s ON s.kd_sps = d.kd_sps \n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar \n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal \n" +
+                        "WHERE DATE(ki.tgl_masuk) < '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "AND (DATE(ki.tgl_keluar) >= '" + Valid.SetTgl(Tgl2.getSelectedItem() + "") + "' \n" +
+                        "OR ki.tgl_keluar IS NULL)\n" +
+                        "AND rp.status_lanjut = 'Ranap' \n" +
+                        "AND b.nm_bangsal LIKE 'Peri%'");
+                ttlakhirbh=akhirbh+akhirbhicu+akhirbhhcu+akhirbhnicu+akhirbhpicu+akhirbhperi;
+//                ttlakhirbh=ttlakhirbh+akhirbh;
+                
+                vvip=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND k2.nm_kelas ='Kelas VVIP'");
+                ttlvvip=vvip;
+//                ttlvvip=ttlvvip+vvip;
+                
+                vip=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND k2.nm_kelas ='Kelas VIP'");
+                ttlvip=vip;
+//                ttlvip=ttlvip+vip;
+                
+                I=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND k2.nm_kelas ='Kelas 1'");
+                ttlI=I;
+//                ttlI=ttlI+I;
+                
+                II=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND k2.nm_kelas ='Kelas 2'");
+                ttlII=II;
+//                ttlII=ttlII+II;
+                
+                III=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' AND k2.nm_kelas ='Kelas 3'");
+                ttlIII=III;
+//                ttlIII=ttlIII+III;
+
+                harirawat=I+II+II+vip+vvip;
+                
+//                harirawat=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+//                        "FROM reg_periksa rp\n" +
+//                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+//                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+//                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+//                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+//                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+//                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+//                        "WHERE b.nm_bangsal not like 'KS%' and b.nm_bangsal not like 'HCU%' and b.nm_bangsal not like '%ICU%' and b.nm_bangsal not like '%Bayi%' and b.nm_bangsal not like '%Perinatologi%' \n" +
+//                        " AND ki.stts_pulang <> 'Pindah Kamar' AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                harirawaticu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'ICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                harirawathcu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'HCU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                harirawatnicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'NICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                harirawatpicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'PICU%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                harirawatperi=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as tanggal\n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%'\n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+//                ttlharirawat=ttlharirawat+harirawat;
+
+
+                khususicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal like 'ICU%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                khusushcu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal like 'HCU%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                khususnicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal like 'NICU%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                khususpicu=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal like 'PICU%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                khususperi=Sequel.cariInteger("SELECT SUM(datediff(if(ki.tgl_keluar='0000-00-00',current_date(),ki.tgl_keluar),rp.tgl_registrasi)+1) as hari \n" +
+                        "FROM reg_periksa rp\n" +
+                        "INNER JOIN kamar_inap ki ON ki.no_rawat = rp.no_rawat\n" +
+                        "INNER JOIN kamar k ON k.kd_kamar = ki.kd_kamar\n" +
+                        "INNER JOIN bangsal b ON b.kd_bangsal = k.kd_bangsal\n" +
+                        "left join dpjp_ranap dr on dr.no_rawat =ki.no_rawat\n" +
+                        "INNER JOIN dokter d on d.kd_dokter =dr.kd_dokter\n" +
+                        "INNER JOIN spesialis s on s.kd_sps =d.kd_sps inner join kelas k2 on k2.kd_kelas=ki.kd_kelas\n" +
+                        "WHERE b.nm_bangsal like 'Perinatologi%' \n" +
+                        "AND rp.tgl_registrasi BETWEEN '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"'");
+                ttlkhusus=khususicu+khusushcu+khususnicu+khususpicu+khususperi;
+                ttlharirawat=harirawat+khususicu+khusushcu+khususnicu+khususpicu+khususperi;
+            if(i>0){
+                tabMode.addRow(new Object[]{
+                    "1","Umum",awalbh,masuk,keluar,matik48l,matik48p,matil48l,matil48p,lamarawat,akhirbh,harirawat,vvip,vip,I,II,III,"0"
+                });
+                tabMode.addRow(new Object[]{
+                    "2","ICU",awalbhicu,masukicu,keluaricu,matiicuk48l,matiicuk48p,matiicul48l,matiicul48p,lamarawaticu,akhirbhicu,khususicu,"0","0","0","0","0",khususicu
+                });
+                tabMode.addRow(new Object[]{
+                    "3","HCU",awalbhhcu,masukhcu,keluarhcu,matihcuk48l,matihcuk48p,matihcul48l,matihcul48p,lamarawathcu,akhirbhhcu,khusushcu,"0","0","0","0","0",khusushcu
+                });
+                tabMode.addRow(new Object[]{
+                    "4","NICU",awalbhnicu,masuknicu,keluarnicu,matinicuk48l,matinicuk48p,matinicul48l,matinicul48p,lamarawatnicu,akhirbhnicu,khususnicu,"0","0","0","0","0",khususnicu
+                });
+                tabMode.addRow(new Object[]{
+                    "5","PICU",awalbhpicu,masukpicu,keluarpicu,matipicuk48l,matipicuk48p,matipicul48l,matipicul48p,lamarawatpicu,akhirbhpicu,khususpicu,"0","0","0","0","0",khususpicu
+                });
+                tabMode.addRow(new Object[]{
+                    "6","Perinatologi",awalbhperi,masukperi,keluarperi,matiperik48l,matiperik48p,matiperil48l,matiperil48p,lamarawatperi,akhirbhperi,khususperi,"0","0","0","0","0",khususperi
+                });
+                
+                tabMode.addRow(new Object[]{
+                    "","TOTAL",ttlawalbh,ttlmasuk,ttlkeluar,ttlmatik48l,ttlmatik48p,ttlmatil48l,ttlmatil48p,ttllamarawat,ttlakhirbh,ttlharirawat,ttlvvip,ttlvip,ttlI,ttlII,ttlIII,ttlkhusus
+                });
+            }
+            this.setCursor(Cursor.getDefaultCursor());
+        }catch(Exception e){
+            System.out.println("Notifikasi : "+e);
+        }
+    }
+
+}
