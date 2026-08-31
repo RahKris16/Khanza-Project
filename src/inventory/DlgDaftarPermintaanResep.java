@@ -2817,7 +2817,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 try {
                     i=Sequel.cariInteger("SELECT MAX(tr.no) from temporary_resep2 tr")+1;
                     ps=koneksi.prepareStatement(
-                        "select databarang.nama_brng,ifnull(resep_dokter.aturan_pakai,\"\") as aturan,resep_dokter.jml,kodesatuan.satuan "
+                        "select databarang.nama_brng,ifnull(resep_dokter.aturan_pakai,\"\") as aturan,resep_dokter.jml,kodesatuan.satuan,resep_obat.no_resep "
                                 + "from resep_obat inner join reg_periksa on resep_obat.no_rawat=reg_periksa.no_rawat "
                                 + "inner join resep_dokter on resep_obat.no_resep=resep_dokter.no_resep "
                                 + "inner join databarang on databarang.kode_brng=resep_dokter.kode_brng "
@@ -2828,7 +2828,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         rs=ps.executeQuery();
                         while(rs.next()){
                             Sequel.menyimpan("temporary_resep2","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",38,new String[]{
-                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
+                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),rs.getString("no_resep"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
                             });
                             i++;
                         }
@@ -2875,7 +2875,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 param.put("jam",JamPeresepan);
                 param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
 
-                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 WHERE temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
+                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 WHERE temporary_resep2.temp5='"+NoResep+"' and temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
                 this.setCursor(Cursor.getDefaultCursor());
             }
         }
@@ -3031,7 +3031,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 try {
                     i=Sequel.cariInteger("SELECT MAX(tr.no) from temporary_resep2 tr")+1;
                     ps=koneksi.prepareStatement(
-                        "select databarang.nama_brng,ifnull(resep_dokter.aturan_pakai,\"\") as aturan,resep_dokter.jml,kodesatuan.satuan "
+                        "select databarang.nama_brng,ifnull(resep_dokter.aturan_pakai,\"\") as aturan,resep_dokter.jml,kodesatuan.satuan,resep_obat.no_resep "
                                 + "from resep_obat inner join reg_periksa on resep_obat.no_rawat=reg_periksa.no_rawat "
                                 + "inner join resep_dokter on resep_obat.no_resep=resep_dokter.no_resep "
                                 + "inner join databarang on databarang.kode_brng=resep_dokter.kode_brng "
@@ -3042,7 +3042,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         rs=ps.executeQuery();
                         while(rs.next()){
                             Sequel.menyimpan("temporary_resep2","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",38,new String[]{
-                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
+                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),rs.getString("no_resep"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
                             });
                             i++;
                         }
@@ -3089,7 +3089,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 param.put("jam",JamPeresepan);
                 param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
 
-                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 where temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
+                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 where temporary_resep2.temp5='"+NoResep+"' and temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
                 this.setCursor(Cursor.getDefaultCursor());
             }
         }
@@ -3105,7 +3105,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 try {
                     i=Sequel.cariInteger("SELECT MAX(tr.no) from temporary_resep2 tr")+1;
                     ps=koneksi.prepareStatement(
-                        "select databarang.nama_brng,ifnull(detail_permintaan_resep_pulang.dosis,\"\") as aturan,detail_permintaan_resep_pulang.jml,kodesatuan.satuan "
+                        "select databarang.nama_brng,ifnull(detail_permintaan_resep_pulang.dosis,\"\") as aturan,detail_permintaan_resep_pulang.jml,kodesatuan.satuan,permintaan_resep_pulang.no_permintaan "
                         + "from permintaan_resep_pulang inner join reg_periksa on permintaan_resep_pulang.no_rawat=reg_periksa.no_rawat "
                         + "inner join detail_permintaan_resep_pulang on detail_permintaan_resep_pulang.no_permintaan=permintaan_resep_pulang.no_permintaan "
                         + "inner join databarang on databarang.kode_brng=detail_permintaan_resep_pulang.kode_brng "
@@ -3115,7 +3115,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         rs=ps.executeQuery();
                         while(rs.next()){
                             Sequel.menyimpan("temporary_resep2","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",38,new String[]{
-                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
+                                ""+i,rs.getString("nama_brng"),rs.getString("aturan"),rs.getString("jml"),rs.getString("satuan"),rs.getString("no_permintaan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",akses.getalamatip()
                             });
                             i++;
                         }
@@ -3162,7 +3162,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 param.put("jam",JamPeresepan);
                 param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
 
-                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 where temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
+                Valid.MyReportqry("rptLembarObat4.jasper","report","::[ Lembar Pemberian Obat ]::","select * from temporary_resep2 where temporary_resep2.temp5='"+NoResep+"' and temporary_resep2.temp37='"+akses.getalamatip()+"' order by temporary_resep2.no",param);
                 this.setCursor(Cursor.getDefaultCursor());
             }
         }
@@ -5375,7 +5375,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                                     " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                                     " left join resep_obat_tambahan rot on rot.no_resep=permintaan_resep_pulang.no_permintaan "+
-                                    " where kamar_inap.stts_pulang='-' and permintaan_resep_pulang.tgl_permintaan between ? and ? "+
+//                                    " where kamar_inap.stts_pulang='-' and permintaan_resep_pulang.tgl_permintaan between ? and ? "+
+                                    " where permintaan_resep_pulang.tgl_permintaan between ? and ? "+
                                     (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                                     "(permintaan_resep_pulang.no_permintaan like ? or permintaan_resep_pulang.no_rawat like ? or "+
                                     "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ? or rot.status like ?)")+
@@ -5394,7 +5395,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                                     " inner join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
                                     " left join resep_obat_tambahan rot on rot.no_resep=permintaan_resep_pulang.no_permintaan "+
-                                    " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and kamar_inap.stts_pulang='-' and permintaan_resep_pulang.tgl_permintaan between ? and ? "+
+                                    " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and permintaan_resep_pulang.tgl_permintaan between ? and ? "+
+//                                    " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and kamar_inap.stts_pulang='-' and permintaan_resep_pulang.tgl_permintaan between ? and ? "+
                                     (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                                     "(permintaan_resep_pulang.no_permintaan like ? or permintaan_resep_pulang.no_rawat like ? or "+
                                     "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ? or rot.status like ?)")+

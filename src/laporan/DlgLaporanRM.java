@@ -57,6 +57,8 @@ public class DlgLaporanRM extends javax.swing.JDialog {
         LoadHTML7.setEditorKit(kit);
         LoadHTML8.setEditable(false);
         LoadHTML8.setEditorKit(kit);
+        LoadHTML9.setEditable(false);
+        LoadHTML9.setEditorKit(kit);
         StyleSheet styleSheet = kit.getStyleSheet();
         styleSheet.addRule(
                 ".isi td{border-right: 1px solid #e2e7dd;font: 8.5px tahoma;height:12px;border-bottom: 1px solid #e2e7dd;background: #ffffff;color:#323232;}"+
@@ -73,6 +75,8 @@ public class DlgLaporanRM extends javax.swing.JDialog {
         LoadHTML5.setDocument(doc);
         LoadHTML6.setDocument(doc);
         LoadHTML7.setDocument(doc);
+        LoadHTML8.setDocument(doc);
+        LoadHTML9.setDocument(doc);
     }
     private Dimension screen=Toolkit.getDefaultToolkit().getScreenSize();
     private int i=0;
@@ -116,6 +120,8 @@ public class DlgLaporanRM extends javax.swing.JDialog {
         LoadHTML6 = new widget.editorpane();
         Scroll7 = new widget.ScrollPane();
         LoadHTML7 = new widget.editorpane();
+        Scroll9 = new widget.ScrollPane();
+        LoadHTML9 = new widget.editorpane();
 
         Kd2.setName("Kd2"); // NOI18N
         Kd2.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -319,6 +325,16 @@ public class DlgLaporanRM extends javax.swing.JDialog {
 
         TabRawat.addTab("ISPA/Pneumonia", Scroll7);
 
+        Scroll9.setBorder(null);
+        Scroll9.setName("Scroll9"); // NOI18N
+        Scroll9.setOpaque(true);
+
+        LoadHTML9.setBorder(null);
+        LoadHTML9.setName("LoadHTML9"); // NOI18N
+        Scroll9.setViewportView(LoadHTML9);
+
+        TabRawat.addTab("Dengue", Scroll9);
+
         internalFrame1.add(TabRawat, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(internalFrame1, java.awt.BorderLayout.CENTER);
@@ -360,6 +376,8 @@ private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             prosesCari7();
         }else if(TabRawat.getSelectedIndex()==8){
             prosesCari8();
+        }else if(TabRawat.getSelectedIndex()==9){
+            prosesCari10();
         }
 }//GEN-LAST:event_btnCariActionPerformed
 
@@ -394,6 +412,8 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
             prosesCari7();
         }else if(TabRawat.getSelectedIndex()==8){
             prosesCari8();
+        }else if(TabRawat.getSelectedIndex()==9){
+            prosesCari10();
         }
     }//GEN-LAST:event_TabRawatMouseClicked
 
@@ -441,6 +461,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
     private widget.editorpane LoadHTML6;
     private widget.editorpane LoadHTML7;
     private widget.editorpane LoadHTML8;
+    private widget.editorpane LoadHTML9;
     private widget.ScrollPane Scroll;
     private widget.ScrollPane Scroll1;
     private widget.ScrollPane Scroll2;
@@ -450,6 +471,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
     private widget.ScrollPane Scroll6;
     private widget.ScrollPane Scroll7;
     private widget.ScrollPane Scroll8;
+    private widget.ScrollPane Scroll9;
     private javax.swing.JTabbedPane TabRawat;
     private widget.Tanggal Tgl1;
     private widget.Tanggal Tgl2;
@@ -1471,5 +1493,85 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
             System.out.println("laporan.DlgLaporanRM.prosesCari() 5 : "+e);
         } 
         this.setCursor(Cursor.getDefaultCursor());    
+    }
+    
+    private void prosesCari10() {
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            htmlContent = new StringBuilder();
+            htmlContent.append(                             
+                "<tr class='isi'>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='2%'>No</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>Tgl Pemeriksaan</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>NIK</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='19%'>Nama</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>Tgl Lahir</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='2%'>JK</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>Nama Ibu</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='10%'>Alamat KTP</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='10%'>Alamat Domisili</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='10%'>No HP</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>Tgl Diagnosa</td>"+
+                    "<td valign='middle' bgcolor='#FFFAFA' align='center' width='10%'>Diagnosa Awal</td>"+
+                "</tr>"
+            );            
+            ps=koneksi.prepareStatement("SELECT rp.tgl_registrasi,p.no_ktp,p.nm_pasien ,p.tgl_lahir, p.jk ,p.nm_ibu,CONCAT(p.alamat,' ',k.nm_kel ,' ',k2.nm_kec ,' ',k3.nm_kab) as alamat,\n" +
+                    "CONCAT(p.alamatpj,' ',p.kelurahanpj,' ',p.kecamatanpj,' ',p.kabupatenpj) as alamatpj,p.no_tlp ,IFNULL(MIN(pr.tgl_perawatan),SUBSTRING(pmi.tanggal,1,10)) as tgl_diagnosa,p2.nm_penyakit \n" +
+                    "FROM reg_periksa rp \n" +
+                    "inner join pasien p on p.no_rkm_medis =rp.no_rkm_medis \n" +
+                    "left join diagnosa_pasien dp on dp.no_rawat =rp.no_rawat\n" +
+                    "inner join kelurahan k on k.kd_kel =p.kd_kel \n" +
+                    "inner join kecamatan k2 on k2.kd_kec =p.kd_kec \n" +
+                    "inner join kabupaten k3 on k3.kd_kab =p.kd_kab\n" +
+                    "left join pemeriksaan_ralan pr on pr.no_rawat =rp.no_rawat \n" +
+                    "left JOIN penilaian_medis_igd pmi on pmi.no_rawat =rp.no_rawat \n" +
+                    "left join penyakit p2 on p2.kd_penyakit =dp.kd_penyakit \n" +
+                    "WHERE rp.tgl_registrasi BETWEEN ? AND ? AND (dp.kd_penyakit LIKE 'A90%' or dp.kd_penyakit LIKE 'A91%')\n" +
+                    "GROUP BY p.no_ktp,MONTH(rp.tgl_registrasi)\n" +
+                    "ORDER by rp.tgl_registrasi ");
+            try {
+                ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
+                ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+""));
+                rs=ps.executeQuery();
+                i=1;
+                while(rs.next()){
+                    htmlContent.append(
+                            "<tr class='isi'>"+
+                                "<td valign='middle' align='center'>"+i+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("tgl_registrasi")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("no_ktp")+"</td>"+
+                                "<td valign='middle' align='left'>"+rs.getString("nm_pasien")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("tgl_lahir")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("jk")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("nm_ibu")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("alamat")+"</td>"+
+                                "<td valign='middle' align='left'>"+rs.getString("alamatpj")+"</td>"+
+                                "<td valign='middle' align='left'>"+rs.getString("no_tlp")+"</td>"+
+                                "<td valign='middle' align='center'>"+rs.getString("tgl_diagnosa")+"</td>"+
+                                "<td valign='middle' align='left'>"+rs.getString("nm_penyakit")+"</td>"+
+                            "</tr>"
+                        );
+                        i++;
+                    }
+            } catch (Exception e) {
+                System.out.println("laporan.DlgLaporanRM.prosesCari10() : "+e);
+            } finally{
+                if(rs!=null){
+                    rs.close();
+                }
+                if(ps!=null){
+                    ps.close();
+                }
+            }
+            LoadHTML9.setText(
+                    "<html>"+
+                      "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
+                       htmlContent.toString()+
+                      "</table>"+
+                    "</html>");
+        } catch (Exception e) {
+            System.out.println("laporan.DlgLaporanRM.prosesCari10() : "+e);
+        } 
+        this.setCursor(Cursor.getDefaultCursor());
     }
 }

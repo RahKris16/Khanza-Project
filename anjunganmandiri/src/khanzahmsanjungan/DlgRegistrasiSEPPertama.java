@@ -1832,7 +1832,7 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
             //cek apakah ada regisan sebelumnya
             if (Valid.ValidasiDOkterCuti(kodedokterreg) == true) {
                 JOptionPane.showMessageDialog(rootPane, "Maaf, Dokter tidak berpraktek hari ini");
-            } else if (Valid.ValidasiRegistrasi(kodepolireg, kodedokterreg, TNoRM.getText(), Valid.SetTgl(TanggalSEP.getSelectedItem() + ""), Kdpnj.getText()) == true) {
+            } else if (Valid.ValidasiRegistrasiNonMJKN(kodepolireg, kodedokterreg, TNoRM.getText(), Valid.SetTgl(TanggalSEP.getSelectedItem() + ""), Kdpnj.getText()) == true) {
                 JOptionPane.showMessageDialog(rootPane, "Maaf, Telah terdaftar pemeriksaan hari ini. Mohon konfirmasi ke Bagian Admisi");
                 emptTeks();
             } else {
@@ -2516,9 +2516,36 @@ public class DlgRegistrasiSEPPertama extends javax.swing.JDialog {
                 }
             }
         }
+        
+        // --- FIX DUPLIKAT NO_RAWAT ANJUNGAN MANDIRI vs MOBILE JKN BOOKING ---
+        // Sebelumnya nomor urut hanya dihitung dari MAX(no_rawat) di reg_periksa untuk tanggal tsb.
+        // Padahal pasien Mobile JKN yang sudah booking jauh hari sebelumnya sudah mendapat no_rawat
+        // yang tersimpan di referensi_mobilejkn_bpjs (kolom tanggalperiksa) walau baris reg_periksa-nya
+        // belum ada (belum checkin). Akibatnya anjungan bisa generate no_rawat yang sama dengan nomor
+        // yang sudah "dijatah" untuk pasien booking tsb. Solusi: ambil MAX dari KEDUA tabel, pilih yang
+        // paling besar, baru increment.
+        String tglPeriksaAnjungan = Valid.SetTgl(TanggalSEP.getSelectedItem().toString());
+        String prefixNoRawatAnjungan = tglPeriksaAnjungan.replaceAll("-", "/") + "/";
 
-        Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + Valid.SetTgl(TanggalSEP.getSelectedItem().toString()) + "' ", Valid.SetTgl(TanggalSEP.getSelectedItem().toString()).replaceAll("-", "/") + "/", 6, TNoRw);
-//        Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(reg_periksa.no_rawat,6),signed)),0) from reg_periksa where reg_periksa.tgl_registrasi='"+Valid.SetTgl(TanggalSEP.getSelectedItem().toString())+"' ",dateformat.format(TanggalSEP.getDate())+"/",6,TNoRw);
+        int maxRegPeriksa = Sequel.cariInteger("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + tglPeriksaAnjungan + "'");
+        int maxReferensiMjkn = Sequel.cariInteger("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from referensi_mobilejkn_bpjs where tanggalperiksa='" + tglPeriksaAnjungan + "'");
+
+        if (maxReferensiMjkn >= maxRegPeriksa) {
+            Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from referensi_mobilejkn_bpjs where tanggalperiksa='" + tglPeriksaAnjungan + "'",
+                    prefixNoRawatAnjungan, 6, TNoRw);
+        } else {
+            Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + tglPeriksaAnjungan + "'",
+                    prefixNoRawatAnjungan, 6, TNoRw);
+        }
+
+        // Safety-net tambahan: jika ternyata TNoRw hasil generate masih bentrok (mis. dua anjungan
+        // klik simpan nyaris bersamaan), naikkan manual sampai benar-benar unik di kedua tabel.
+        while (Sequel.cariInteger("select count(*) from reg_periksa where no_rawat='" + TNoRw.getText() + "'") > 0
+                || Sequel.cariInteger("select count(*) from referensi_mobilejkn_bpjs where no_rawat='" + TNoRw.getText() + "'") > 0) {
+            int nomorBerikutnya = Integer.parseInt(TNoRw.getText().substring(TNoRw.getText().length() - 6)) + 1;
+            TNoRw.setText(prefixNoRawatAnjungan + String.format("%06d", nomorBerikutnya));
+        }
+//        Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + Valid.SetTgl(TanggalSEP.getSelectedItem().toString()) + "' ", Valid.SetTgl(TanggalSEP.getSelectedItem().toString()).replaceAll("-", "/") + "/", 6, TNoRw);
     }
 
     private void tentukanHari() {

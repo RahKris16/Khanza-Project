@@ -1468,6 +1468,19 @@ public final class validasi {
 
     public boolean ValidasiRegistrasi(String kodepoli, String kodedokter, String norm, String tglperiksa, String kodepj) {
         try {
+            if (sek.cariInteger("select count(reg_periksa.no_rkm_medis) from reg_periksa where reg_periksa.kd_poli='" + kodepoli + "' and reg_periksa.kd_dokter='" + kodedokter + "' and reg_periksa.no_rkm_medis='" + norm + "' and reg_periksa.tgl_registrasi='" + tglperiksa + "' and reg_periksa.kd_pj='" + kodepj + "' and reg_periksa.asal_booking<>'M-JKN'") > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi : " + e);
+            return false;
+        }
+    }
+    
+    public boolean ValidasiRegistrasiNonMJKN(String kodepoli, String kodedokter, String norm, String tglperiksa, String kodepj) {
+        try {
             if (sek.cariInteger("select count(reg_periksa.no_rkm_medis) from reg_periksa where reg_periksa.kd_poli='" + kodepoli + "' and reg_periksa.kd_dokter='" + kodedokter + "' and reg_periksa.no_rkm_medis='" + norm + "' and reg_periksa.tgl_registrasi='" + tglperiksa + "' and reg_periksa.kd_pj='" + kodepj + "'") > 0) {
                 return true;
             } else {
@@ -1481,7 +1494,7 @@ public final class validasi {
 
     public boolean ValidasiDOkterCuti(String kodedokter) {
         try {
-            if (sek.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + sek.cariIsi("select current_date") + "' and jadwal_cuti_libur.kd_dokter='" + kodedokter + "' ") > 0) {
+            if (sek.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + sek.cariIsi("select current_date") + "' and jadwal_cuti_libur.kd_dokter='" + kodedokter + "' and status='Tidak Praktek' ") > 0) {
                 return true;
             } else {
                 return false;

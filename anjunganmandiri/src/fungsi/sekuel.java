@@ -125,6 +125,7 @@ public final class sekuel {
             if (ps != null) {
                 ps.close();
             }
+            SimpanTrack("insert into "+table+" values("+value+")");
             return true;
         } catch (Exception e) {
             System.out.println("Notifikasi : " + e);
@@ -310,7 +311,7 @@ public final class sekuel {
                     dicari = dicari + "|" + a[angka - 1];
                 }
             }
-            SimpanTrack("insert into " + table + " values(" + dicari + ")");
+            SimpanTrack("insert into " + table + " values(" +dicari+ ")");
         } catch (Exception e) {
             bool = false;
             System.out.println("Notifikasi : " + e);
@@ -340,7 +341,7 @@ public final class sekuel {
                     dicari = dicari + "|" + a[angka - 1];
                 }
             }
-            SimpanTrack("insert into " + table + " values(" + dicari + ")");
+            SimpanTrack("insert into " + table + " values(" + value + ")");
         } catch (Exception e) {
             System.out.println("Notifikasi : " + e);
         }

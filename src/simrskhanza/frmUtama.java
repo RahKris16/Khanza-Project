@@ -24,6 +24,8 @@ import permintaan.DlgCariPermintaanLab;
 import permintaan.DlgBookingRegistrasi;
 import permintaan.DlgBookingOperasi;
 import surat.SuratKontrol;
+import surat.SuratKeteranganDalamPerawatan;
+import surat.SuratKontrolManual;
 import kepegawaian.DlgPenggajian;
 import laporan.DlgMutasiBerkas;
 import laporan.DlgBerkasRawat;
@@ -1676,6 +1678,8 @@ public class frmUtama extends javax.swing.JFrame {
         btnLaboratoriumPA = new widget.ButtonBig();
         btnLaboratoriumMB = new widget.ButtonBig();
         BtnCuti = new widget.ButtonBig();
+        btnSKDP = new widget.ButtonBig();
+        btnSuratKontrol = new widget.ButtonBig();
         internalFrame1 = new widget.InternalFrame();
         BtnMenu = new widget.ButtonBig();
         jSeparator4 = new javax.swing.JSeparator();
@@ -1975,7 +1979,7 @@ public class frmUtama extends javax.swing.JFrame {
 
         tanggal.setEditable(false);
         tanggal.setForeground(new java.awt.Color(50, 70, 50));
-        tanggal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27/04/2026" }));
+        tanggal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "03/08/2026" }));
         tanggal.setDisplayFormat("dd/MM/yyyy");
         tanggal.setName("tanggal"); // NOI18N
         tanggal.setOpaque(false);
@@ -7037,6 +7041,28 @@ public class frmUtama extends javax.swing.JFrame {
         BtnCuti.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnCutiActionPerformed(evt);
+            }
+        });
+
+        btnSKDP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/iconfinder_vector_66_15_473627.png"))); // NOI18N
+        btnSKDP.setText("Surat Keterangan Dalam Perawatan");
+        btnSKDP.setIconTextGap(0);
+        btnSKDP.setName("btnSKDP"); // NOI18N
+        btnSKDP.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnSKDP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSKDPActionPerformed(evt);
+            }
+        });
+
+        btnSuratKontrol.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/iconfinder_vector_66_15_473627.png"))); // NOI18N
+        btnSuratKontrol.setText("Surat Kontrol 2");
+        btnSuratKontrol.setIconTextGap(0);
+        btnSuratKontrol.setName("btnSuratKontrol"); // NOI18N
+        btnSuratKontrol.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnSuratKontrol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuratKontrolActionPerformed(evt);
             }
         });
 
@@ -15855,6 +15881,28 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_BtnCutiActionPerformed
 
+    private void btnSKDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSKDPActionPerformed
+        isTutup();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        SuratKeteranganDalamPerawatan form=new SuratKeteranganDalamPerawatan(this,false);
+        form.setSize(PanelUtama.getWidth(),PanelUtama.getHeight());
+        form.setLocationRelativeTo(PanelUtama);
+        form.setVisible(true);
+        DlgHome.dispose();
+        this.setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnSKDPActionPerformed
+
+    private void btnSuratKontrolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuratKontrolActionPerformed
+        isTutup();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        SuratKontrolManual form=new SuratKontrolManual(this,false);
+        form.setSize(PanelUtama.getWidth(),PanelUtama.getHeight());
+        form.setLocationRelativeTo(PanelUtama);
+        form.setVisible(true);
+        DlgHome.dispose();
+        this.setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_btnSuratKontrolActionPerformed
+
     private void btnKategoriPerpustakaanActionPerformed(java.awt.event.ActionEvent evt) {
         isTutup();
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -22192,6 +22240,7 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
     private widget.ButtonBig btnRujukanKeluarBPJS;
     private widget.ButtonBig btnRujukanKeluarSisrute;
     private widget.ButtonBig btnRujukanMasukSisrute;
+    private widget.ButtonBig btnSKDP;
     private widget.ButtonBig btnSKDPBPJS;
     private widget.ButtonBig btnSMS;
     private widget.ButtonBig btnSaldoAkunPerBulan;
@@ -22236,6 +22285,7 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
     private widget.ButtonBig btnSuratIndeks;
     private widget.ButtonBig btnSuratKeluar;
     private widget.ButtonBig btnSuratKlasifikasi;
+    private widget.ButtonBig btnSuratKontrol;
     private widget.ButtonBig btnSuratMap;
     private widget.ButtonBig btnSuratMasuk;
     private widget.ButtonBig btnSuratPemesananMedis;
@@ -27209,6 +27259,21 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
             
             if(akses.getskdp_bpjs()==true){
                 Panelmenu.add(btnSKDPBPJS);
+                jmlmenu++;
+            }
+            
+            if(akses.getskdp_bpjs()==true){
+                Panelmenu.add(btnSKDP);
+                jmlmenu++;
+            }
+            
+            if(akses.getskdp_bpjs()==true){
+                Panelmenu.add(btnSuratKontrol);
+                jmlmenu++;
+            }
+            
+            if(akses.getskdp_bpjs()==true){
+                Panelmenu.add(btnSuratKontrol);
                 jmlmenu++;
             }
             
@@ -32344,6 +32409,16 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
         
         if(akses.getskdp_bpjs()==true){
             Panelmenu.add(btnSKDPBPJS);
+            jmlmenu++;
+        }
+        
+        if(akses.getskdp_bpjs()==true){
+            Panelmenu.add(btnSKDP);
+            jmlmenu++;
+        }
+        
+        if(akses.getskdp_bpjs()==true){
+            Panelmenu.add(btnSuratKontrol);
             jmlmenu++;
         }
         
@@ -39381,6 +39456,20 @@ private void btnIndustriFarmasi41ActionPerformed(java.awt.event.ActionEvent evt)
         if(akses.getskdp_bpjs()==true){
             if(btnSKDPBPJS.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
                 Panelmenu.add(btnSKDPBPJS);
+                jmlmenu++;
+            }                
+        }
+        
+        if(akses.getskdp_bpjs()==true){
+            if(btnSKDP.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnSKDP);
+                jmlmenu++;
+            }                
+        }
+        
+        if(akses.getskdp_bpjs()==true){
+            if(btnSuratKontrol.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnSuratKontrol);
                 jmlmenu++;
             }                
         }

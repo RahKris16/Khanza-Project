@@ -636,7 +636,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         MnAwalMedis = new javax.swing.JMenu();
         MnPenilaianAwalMedisRalan = new javax.swing.JMenuItem();
         MnPenilaianAwalMedisRalanKebidanan = new javax.swing.JMenuItem();
-        MnPenilaianAwalMedisRalanBayi = new javax.swing.JMenuItem();
+        MnPenilaianAwalMedisRalanAnak = new javax.swing.JMenuItem();
         MnPenilaianAwalMedisRalanTHT = new javax.swing.JMenuItem();
         MnPenilaianAwalMedisRalanPsikiatri = new javax.swing.JMenuItem();
         MnPenilaianAwalMedisRalanPenyakitDalam = new javax.swing.JMenuItem();
@@ -1340,21 +1340,21 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         });
         MnAwalMedis.add(MnPenilaianAwalMedisRalanKebidanan);
 
-        MnPenilaianAwalMedisRalanBayi.setBackground(new java.awt.Color(255, 255, 254));
-        MnPenilaianAwalMedisRalanBayi.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
-        MnPenilaianAwalMedisRalanBayi.setForeground(new java.awt.Color(50, 50, 50));
-        MnPenilaianAwalMedisRalanBayi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
-        MnPenilaianAwalMedisRalanBayi.setText("Penilaian Awal Medis Bayi/Anak");
-        MnPenilaianAwalMedisRalanBayi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        MnPenilaianAwalMedisRalanBayi.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        MnPenilaianAwalMedisRalanBayi.setName("MnPenilaianAwalMedisRalanBayi"); // NOI18N
-        MnPenilaianAwalMedisRalanBayi.setPreferredSize(new java.awt.Dimension(310, 26));
-        MnPenilaianAwalMedisRalanBayi.addActionListener(new java.awt.event.ActionListener() {
+        MnPenilaianAwalMedisRalanAnak.setBackground(new java.awt.Color(255, 255, 254));
+        MnPenilaianAwalMedisRalanAnak.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        MnPenilaianAwalMedisRalanAnak.setForeground(new java.awt.Color(50, 50, 50));
+        MnPenilaianAwalMedisRalanAnak.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        MnPenilaianAwalMedisRalanAnak.setText("Penilaian Awal Medis Anak");
+        MnPenilaianAwalMedisRalanAnak.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnPenilaianAwalMedisRalanAnak.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnPenilaianAwalMedisRalanAnak.setName("MnPenilaianAwalMedisRalanAnak"); // NOI18N
+        MnPenilaianAwalMedisRalanAnak.setPreferredSize(new java.awt.Dimension(310, 26));
+        MnPenilaianAwalMedisRalanAnak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MnPenilaianAwalMedisRalanBayiActionPerformed(evt);
+                MnPenilaianAwalMedisRalanAnakActionPerformed(evt);
             }
         });
-        MnAwalMedis.add(MnPenilaianAwalMedisRalanBayi);
+        MnAwalMedis.add(MnPenilaianAwalMedisRalanAnak);
 
         MnPenilaianAwalMedisRalanTHT.setBackground(new java.awt.Color(255, 255, 254));
         MnPenilaianAwalMedisRalanTHT.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -6149,7 +6149,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         panelBiasa2.setLayout(null);
 
         TglSakit1.setForeground(new java.awt.Color(50, 70, 50));
-        TglSakit1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        TglSakit1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "14-07-2026" }));
         TglSakit1.setDisplayFormat("dd-MM-yyyy");
         TglSakit1.setName("TglSakit1"); // NOI18N
         TglSakit1.setOpaque(false);
@@ -6196,7 +6196,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         jLabel32.setBounds(176, 10, 20, 23);
 
         TglSakit2.setForeground(new java.awt.Color(50, 70, 50));
-        TglSakit2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        TglSakit2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "14-07-2026" }));
         TglSakit2.setDisplayFormat("dd-MM-yyyy");
         TglSakit2.setName("TglSakit2"); // NOI18N
         TglSakit2.setOpaque(false);
@@ -6468,7 +6468,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         jLabel15.setPreferredSize(new java.awt.Dimension(70, 23));
         panelGlass8.add(jLabel15);
 
-        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "14-07-2026" }));
         DTPCari1.setDisplayFormat("dd-MM-yyyy");
         DTPCari1.setName("DTPCari1"); // NOI18N
         DTPCari1.setOpaque(false);
@@ -6481,7 +6481,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         jLabel17.setPreferredSize(new java.awt.Dimension(23, 23));
         panelGlass8.add(jLabel17);
 
-        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "14-07-2026" }));
         DTPCari2.setDisplayFormat("dd-MM-yyyy");
         DTPCari2.setName("DTPCari2"); // NOI18N
         DTPCari2.setOpaque(false);
@@ -11215,7 +11215,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         }
     }//GEN-LAST:event_MnPenilaianAwalMedisIGDActionPerformed
 
-    private void MnPenilaianAwalMedisRalanBayiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnPenilaianAwalMedisRalanBayiActionPerformed
+    private void MnPenilaianAwalMedisRalanAnakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnPenilaianAwalMedisRalanAnakActionPerformed
         if(tabModekasir.getRowCount()==0){
             JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
             //TNoReg.requestFocus();
@@ -11235,7 +11235,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                 this.setCursor(Cursor.getDefaultCursor());
             }
         }
-    }//GEN-LAST:event_MnPenilaianAwalMedisRalanBayiActionPerformed
+    }//GEN-LAST:event_MnPenilaianAwalMedisRalanAnakActionPerformed
 
     private void MnPenilaianFisioterapiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnPenilaianFisioterapiActionPerformed
         if(tabModekasir.getRowCount()==0){
@@ -13921,7 +13921,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
     private javax.swing.JMenuItem MnPenilaianAwalMedisHemodialisa;
     private javax.swing.JMenuItem MnPenilaianAwalMedisIGD;
     private javax.swing.JMenuItem MnPenilaianAwalMedisRalan;
-    private javax.swing.JMenuItem MnPenilaianAwalMedisRalanBayi;
+    private javax.swing.JMenuItem MnPenilaianAwalMedisRalanAnak;
     private javax.swing.JMenuItem MnPenilaianAwalMedisRalanBedah;
     private javax.swing.JMenuItem MnPenilaianAwalMedisRalanBedahMulut;
     private javax.swing.JMenuItem MnPenilaianAwalMedisRalanGeriatri;
@@ -14189,11 +14189,15 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                 "reg_periksa.status_bayar,reg_periksa.status_poli,reg_periksa.kd_pj,reg_periksa.kd_poli,pasien.no_tlp,cp.catatan,if(rmb.status is null,\"Checkin\",rmb.status) as status_jkn,pp.status,dpp.nama_bayar " +
                 "from reg_periksa inner join dokter on reg_periksa.kd_dokter=dokter.kd_dokter inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis " +
                 "inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli " +
-                "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj " +
+                "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj " + 
                 "LEFT join catatan_pasien cp on cp.no_rkm_medis =reg_periksa.no_rawat "+
                 "left join detail_piutang_pasien dpp on dpp.no_rawat=reg_periksa.no_rawat "+
                 "left join piutang_pasien pp on pp.no_rawat=reg_periksa.no_rawat "+
-                "LEFT join referensi_mobilejkn_bpjs rmb on rmb.no_rawat=reg_periksa.no_rawat where "+
+                "LEFT join referensi_mobilejkn_bpjs rmb \n" +
+                "    on rmb.no_rawat=reg_periksa.no_rawat \n" +
+                "    and rmb.nobooking = (\n" +
+                "        select MAX(x.nobooking) from referensi_mobilejkn_bpjs x where x.no_rawat = reg_periksa.no_rawat\n" +
+                "    ) where "+
                 "reg_periksa.tgl_registrasi between ? and ? and reg_periksa.status_lanjut='Ralan' and if(rmb.status is null,\"Checkin\",rmb.status)<>'Belum' and if(rmb.status is null,\"Checkin\",rmb.status)<>'Batal' "+tampildiagnosa+
                 (semua?"":"and reg_periksa.kd_pj like ? and poliklinik.nm_poli like ? and dokter.nm_dokter like ? and reg_periksa.stts like ? and reg_periksa.status_bayar like ? and "+
                 "(reg_periksa.no_reg like ? or reg_periksa.no_rawat like ? or reg_periksa.tgl_registrasi like ? or reg_periksa.kd_dokter like ? or dokter.nm_dokter like ? or reg_periksa.no_rkm_medis like ? or pasien.nm_pasien like ? or poliklinik.nm_poli like ? or "+
@@ -14450,7 +14454,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         MnPenilaianAwalMedisRalan.setEnabled(akses.getpenilaian_awal_medis_ralan());       
         MnPenilaianAwalMedisRalanKebidanan.setEnabled(akses.getpenilaian_awal_medis_ralan_kebidanan());      
         MnPenilaianAwalMedisIGD.setEnabled(akses.getpenilaian_awal_medis_igd());    
-        MnPenilaianAwalMedisRalanBayi.setEnabled(akses.getpenilaian_awal_medis_ralan_anak()); 
+        MnPenilaianAwalMedisRalanAnak.setEnabled(akses.getpenilaian_awal_medis_ralan_anak()); 
         MnPenilaianFisioterapi.setEnabled(akses.getpenilaian_fisioterapi());            
         ppProgramPRB.setEnabled(akses.getbpjs_program_prb());      
         ppSuplesiJasaRaharja.setEnabled(akses.getbpjs_suplesi_jasaraharja());  
@@ -14559,7 +14563,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
             namadokter=billing.dokter.tampil3(akses.getkode());
             if(!namadokter.equals("")){
                 CrPtg.setText(namadokter);
-                BtnSeek3.setEnabled(false);
+                BtnSeek3.setEnabled(true);
                 CrPtg.setEditable(false);
             }else{
                 CrPtg.setText("");
@@ -14675,7 +14679,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         MnPenilaianAwalMedisRalan.setEnabled(akses.getpenilaian_awal_medis_ralan());       
         MnPenilaianAwalMedisRalanKebidanan.setEnabled(akses.getpenilaian_awal_medis_ralan_kebidanan());      
         MnPenilaianAwalMedisIGD.setEnabled(akses.getpenilaian_awal_medis_igd());    
-        MnPenilaianAwalMedisRalanBayi.setEnabled(akses.getpenilaian_awal_medis_ralan_anak()); 
+        MnPenilaianAwalMedisRalanAnak.setEnabled(akses.getpenilaian_awal_medis_ralan_anak()); 
         MnPenilaianFisioterapi.setEnabled(akses.getpenilaian_fisioterapi());            
         ppProgramPRB.setEnabled(akses.getbpjs_program_prb());      
         ppSuplesiJasaRaharja.setEnabled(akses.getbpjs_suplesi_jasaraharja());  

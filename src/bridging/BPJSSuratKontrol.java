@@ -1097,7 +1097,7 @@ public class BPJSSuratKontrol extends javax.swing.JDialog {
             Valid.textKosong(NoRawat,"pasien");
         }else if(NmDokter.getText().trim().equals("")||KdDokter.getText().trim().equals("")){
             Valid.textKosong(KdDokter,"Dokter");
-        }else if(NmPoli.getText().trim().equals("")||NmPoli.getText().trim().equals("")){
+        }else if(NmPoli.getText().trim().equals("")||KdPoli.getText().trim().equals("")){
             Valid.textKosong(KdPoli,"Poli");
         }else if(Sequel.cariInteger("select count(no_rkm_medis) from booking_registrasi where tanggal_periksa='"+Valid.SetTgl(TanggalKontrol.getSelectedItem()+"")+"' and no_rkm_medis='"+NoRM.getText()+"'")>0){
             NmPoli2.setText(Sequel.cariIsi("select p.nm_poli from booking_registrasi br inner join poliklinik p on p.kd_poli=br.kd_poli where br.tanggal_periksa='"+Valid.SetTgl(TanggalKontrol.getSelectedItem()+"")+"' and br.no_rkm_medis='"+NoRM.getText()+"'"));
@@ -1132,7 +1132,8 @@ public class BPJSSuratKontrol extends javax.swing.JDialog {
                     //response = root.path("response").path("noSuratKontrol");
                 
                     if(Sequel.menyimpantf("bridging_surat_kontrol_bpjs","?,?,?,?,?,?,?,?","No.Surat",8,new String[]{
-                            NoSEP.getText(),Valid.SetTgl(TanggalSurat.getSelectedItem()+""),response.asText(),Valid.SetTgl(TanggalKontrol.getSelectedItem()+""),KdDokter.getText(),NmDokter.getText(),KdPoli.getText(),NmPoli.getText()
+                            NoSEP.getText(),Valid.SetTgl(TanggalSurat.getSelectedItem()+""),response.asText(),Valid.SetTgl(TanggalKontrol.getSelectedItem()+""),
+                        KdDokter.getText(),NmDokter.getText(),KdPoli.getText(),NmPoli.getText()
                         })==true){
                         emptTeks();
                         tampil();

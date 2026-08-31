@@ -31,9 +31,12 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMPemantauanMEOWS.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/bridging/MobileJKNReferensiPendaftaran.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/permintaan/DlgBookingRegistrasi.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMPenilaianAwalKeperawatanRalan.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgRl34.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPenjualan.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/surat/SuratKeteranganDalamPerawatan.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/grafikanalisa/grafikepid.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/fungsi/WarnaTable6.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/simrskhanza/DlgCariPeriksaLab.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/simrskhanza/DlgReg.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgPelayananApotek.java</file>
@@ -45,6 +48,7 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/grafikanalisa/GrafikRegistrasiPerDokter.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgCariPemesanan.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/permintaan/DlgPermintaanLaboratorium.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMPenilaianAwalMedisRalanAnak.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgKelas.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMCariPemeriksaanIGD.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgLaporanRM.java</file>
@@ -53,9 +57,12 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMDataResumePasienIGD.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgRekapMarketing.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMRiwayatPerawatan.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/simrskhanza/DlgTanggalJamKontrolCustom.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/surat/SuratKontrolManual.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMDataResumePasien.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgPembayaranRanap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/bridging/BPJSAntreanPerTanggal.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMPenilaianAwalMedisRanapDewasa.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgBilingRalan.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/surat/SuratPersetujuanRawatInap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMProgramTerapi.java</file>
@@ -74,6 +81,8 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgPerkiraanBiayaRanap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgLhtPiutang.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgRl32.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPeresepanDokter_6_1.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMPenilaianAwalKeperawatanRalanGeriatri.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMDataCatatanKeperawatanRanap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/simrskhanza/DlgRawatJalan.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPermintaanResepPulang.java</file>
@@ -86,6 +95,7 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/permintaan/DlgBookingOperasi.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/keuangan/DlgBilingRanap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPermintaanResepPulang_1.java</file>
+            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgCariObat2.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/rekammedis/RMDataResumePasienRanap.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/surat/SuratBebasNarkoba.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/laporan/DlgRL4B.java</file>
@@ -93,7 +103,6 @@
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPeresepanDokter.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/permintaan/DlgCariPermintaanLab.java</file>
             <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/simrskhanza/frmUtama.java</file>
-            <file>file:/D:/Khanza_Gifthub_2/SIMRS-Khanza-master/src/inventory/DlgPeresepanDokter_Hemoroid.java</file>
         </group>
     </open-files>
 </project-private>

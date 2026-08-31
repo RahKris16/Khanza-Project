@@ -7,9 +7,12 @@
     <entry key="PORT">nioxtijcpDaKSUiUiP5FAg==</entry>
     <entry key="USER">3fsjwvKJn8IpzysMeNu3bA==</entry>
     <entry key="PAS">WANoTdLmXHK7V+UtLZgrGFTKYFw8vNXtU3wJnofWH+M=</entry>
-    <entry key="CARICEPAT">nonaktif</entry>
+    <entry key="CARICEPAT">aktif</entry>
+		<!-- 10.10.88.254 -->
+    <!-- <entry key="HOSTHYBRIDWEB">tHI2bQkDgZlTx3ecIhqILQ==</entry>  -->
+    <!-- 10.10.88.247 -->
     <entry key="HOSTHYBRIDWEB">Wh/oQHytCKhP6vASLICtTg==</entry>
-    <entry key="USERHYBRIDWEB">nmXqCKzrz9i8GTZlq7JruQ==</entry>
+	<entry key="USERHYBRIDWEB">nmXqCKzrz9i8GTZlq7JruQ==</entry>
     <entry key="PASHYBRIDWEB">AsJ/0/gCnYnD+gK4fw9uKA==</entry>
     <entry key="HYBRIDWEB">webapps</entry>
     <entry key="PORTWEB">80</entry>
@@ -22,7 +25,7 @@
     <entry key="STOKKOSONGRESEP">no</entry>
     <entry key="HPPFARMASI">h_beli</entry>
     <entry key="HPPTOKO">dasar</entry>
-    <entry key="ALARMLAB">no</entry>
+    <entry key="ALARMLAB">yes</entry>
     <entry key="FORMALARMLAB">ralan + ranap</entry>
     <entry key="ALARMRADIOLOGI">yes</entry>
     <entry key="FORMALARMRADIOLOGI">ralan + ranap</entry>
@@ -33,16 +36,16 @@
     <entry key="MENUTRANSPARAN">no</entry>
     <entry key="TANGGALMUNDUR">yes</entry>
     <entry key="URLAPIBPJS">https://apijkn.bpjs-kesehatan.go.id/vclaim-rest</entry>
-    <entry key="SECRETKEYAPIBPJS">MeVtAaEQaHzUjkeehM2COQ==</entry>
+    <entry key="SECRETKEYAPIBPJS">jWnTufGLg7k5DWh0Zc6CdQ==</entry>
     <entry key="CONSIDAPIBPJS">yBXbOS5+MJPygnU5pGuquA==</entry>
     <entry key="USERKEYAPIBPJS">Odh7hbRUdW5EV7QSqMd7Cm+ISvforyrM6qIHjB28JTteyQdZWJcfePSwxJCavSBl</entry>
     <entry key="DIAGNOSARUJUKANMASUKAPIBPJS">yes</entry>
     <entry key="URLAPIAPLICARE">https://new-api.bpjs-kesehatan.go.id/aplicaresws</entry>
-    <entry key="SECRETKEYAPIAPLICARE">MeVtAaEQaHzUjkeehM2COQ==</entry>
+    <entry key="SECRETKEYAPIAPLICARE">jWnTufGLg7k5DWh0Zc6CdQ==</entry>
     <entry key="CONSIDAPIAPLICARE">yBXbOS5+MJPygnU5pGuquA==</entry>
     <entry key="USERKEYAPIAPLICARE">Odh7hbRUdW5EV7QSqMd7Cm+ISvforyrM6qIHjB28JTteyQdZWJcfePSwxJCavSBl</entry>
     <entry key="URLAPIMOBILEJKN">https://apijkn.bpjs-kesehatan.go.id/antreanrs</entry>
-    <entry key="SECRETKEYAPIMOBILEJKN">MeVtAaEQaHzUjkeehM2COQ==</entry>
+    <entry key="SECRETKEYAPIMOBILEJKN">jWnTufGLg7k5DWh0Zc6CdQ==</entry>
     <entry key="CONSIDAPIMOBILEJKN">yBXbOS5+MJPygnU5pGuquA=</entry>
     <entry key="USERKEYAPIMOBILEJKN">gYJF7EAj0vNOswY+ivy9W6bqfyQzsUHMfOU48aEEm0Rv2PgbVFs1RMOWegfn26/g</entry>
     <entry key="URLAPIAPOTEKBPJS">https://dev-soa.bpjs-kesehatan.go.id/apotek-rest</entry>
@@ -50,7 +53,7 @@
     <entry key="CONSIDAPIAPOTEKBPJS">l4nh5eVYrLAER/I2A4b3Tw==</entry>
     <entry key="USERKEYAPIAPOTEKBPJS">l4nh5eVYrLAER/I2A4b3Tw==</entry>
     <entry key="URLAPIICARE">https://apijkn.bpjs-kesehatan.go.id/wsihs/api/rs</entry>
-    <entry key="SECRETKEYAPIICARE">MeVtAaEQaHzUjkeehM2COQ==</entry>
+    <entry key="SECRETKEYAPIICARE">jWnTufGLg7k5DWh0Zc6CdQ==</entry>
     <entry key="CONSIDAPIICARE">yBXbOS5+MJPygnU5pGuquA==</entry>
     <entry key="USERKEYAPIICARE">Odh7hbRUdW5EV7QSqMd7Cm+ISvforyrM6qIHjB28JTteyQdZWJcfePSwxJCavSBl</entry>
     <entry key="URLAPIPCARE">https://apijkn-dev.bpjs-kesehatan.go.id/pcare-rest-dev</entry>
@@ -65,8 +68,8 @@
     <entry key="IDSISRUTE">l4nh5eVYrLAER/I2A4b3Tw==</entry>
     <entry key="PASSSISRUTE">l4nh5eVYrLAER/I2A4b3Tw==</entry>
     <entry key="URLAPISIRS">https://sirs.kemkes.go.id/fo/index.php/Fasyankes</entry>
-    <entry key="IDSIRS">jhPSu1xlQkh+stLFrcin5w==</entry>
-    <entry key="PASSSIRS">BYptJvsq544HinWKjX8VTA==</entry>
+    <entry key="IDSIRS">vLWvza/3kU5+rLuatPmJYg==</entry>
+    <entry key="PASSSIRS">WANoTdLmXHK7V+UtLZgrGCZ1tGMkau8LUhdjsw32qrw=</entry>
     <entry key="URLAPISITT">http://sirs.yankes.kemkes.go.id/sirsservice/sitbtraining/sitb/senddata</entry>
     <entry key="IDSITT">Fm2U09DVwzqY2V8sl5jUCA==</entry>
     <entry key="PASSSITT">ri7lfclUM11skv5F+NuUUg==</entry>
@@ -150,13 +153,9 @@
     <entry key="PORTORTHANC">4xOkFa6gxM9Bc/dkpEtJ+A==</entry>
     <entry key="USERORTHANC">V9bi0P2HgAq8Nn8lUyS6/A==</entry>
     <entry key="PASSORTHANC">V9bi0P2HgAq8Nn8lUyS6/A==</entry>
-    <entry key="URLFINGERPRINTBPJS">https://fp.bpjs-kesehatan.go.id/finger-rest/</entry>
+		<entry key="URLFINGERPRINTBPJS">https://fp.bpjs-kesehatan.go.id/finger-rest/</entry>
     <entry key="URLAPLIKASIFINGERPRINTBPJS">C:\Program Files (x86)\Aplikasi Sidik Jari BPJS Kesehatan\After.exe</entry>
     <entry key="USERFINGERPRINTBPJS"></entry>
     <entry key="PASSWORDFINGERPRINTBPJS"></entry>
     <entry key="URLAPLIKASIFRISTA">C:\frista\frista.exe</entry>
-    <entry key="URLBADUNGSEHAT">https://dinkesbridgingapi.sanatasystem.net</entry>
-    <entry key="USERBADUNGSEHAT">zN433FszHzBCpVWMyV0wIQ==</entry>
-    <entry key="PASSBADUNGSEHAT">wcSR/AJ1Zavyo0zgf2SuMQ==</entry>
-    
 </properties>

@@ -66,7 +66,7 @@ public final class DlgPeresepanDokter_34 extends javax.swing.JDialog {
     private int jml=0;
     private DlgMetodeRacik metoderacik=new DlgMetodeRacik(null,false);
     public DlgCariDokter dokter=new DlgCariDokter(null,false);
-    private String a="", noracik="",tampilkan_ppnobat_ralan="",status="",bangsal="",kamar="",norawatibu="",kelas,bangsaldefault=Sequel.cariIsi("select kd_bangsal from set_lokasi limit 1");
+    private String lokasi="",a="", noracik="",tampilkan_ppnobat_ralan="",status="",bangsal="",kamar="",norawatibu="",kelas,bangsaldefault=Sequel.cariIsi("select kd_bangsal from set_lokasi limit 1");
     /** Creates new form DlgPenyakit
      * @param parent
      * @param modal */
@@ -419,6 +419,8 @@ public final class DlgPeresepanDokter_34 extends javax.swing.JDialog {
         LTotal = new widget.Label();
         LTotalTagihan = new widget.Label();
         jLabel9 = new widget.Label();
+        label13 = new widget.Label();
+        Jeniskelas1 = new widget.ComboBox();
         TabRawat = new javax.swing.JTabbedPane();
         Scroll = new widget.ScrollPane();
         tbResep = new widget.Table();
@@ -732,7 +734,7 @@ public final class DlgPeresepanDokter_34 extends javax.swing.JDialog {
         jLabel8.setBounds(0, 42, 72, 23);
 
         DTPBeri.setForeground(new java.awt.Color(50, 70, 50));
-        DTPBeri.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "25-04-2023" }));
+        DTPBeri.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "01-09-2023" }));
         DTPBeri.setDisplayFormat("dd-MM-yyyy");
         DTPBeri.setName("DTPBeri"); // NOI18N
         DTPBeri.setOpaque(false);
@@ -836,6 +838,28 @@ public final class DlgPeresepanDokter_34 extends javax.swing.JDialog {
         jLabel9.setPreferredSize(new java.awt.Dimension(65, 23));
         FormInput.add(jLabel9);
         jLabel9.setBounds(520, 42, 65, 23);
+
+        label13.setText("Lokasi :");
+        label13.setName("label13"); // NOI18N
+        label13.setPreferredSize(new java.awt.Dimension(50, 23));
+        FormInput.add(label13);
+        label13.setBounds(700, 12, 50, 23);
+
+        Jeniskelas1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Farmasi", "Depo Farmasi" }));
+        Jeniskelas1.setName("Jeniskelas1"); // NOI18N
+        Jeniskelas1.setPreferredSize(new java.awt.Dimension(120, 23));
+        Jeniskelas1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                Jeniskelas1ItemStateChanged(evt);
+            }
+        });
+        Jeniskelas1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                Jeniskelas1KeyPressed(evt);
+            }
+        });
+        FormInput.add(Jeniskelas1);
+        Jeniskelas1.setBounds(755, 12, 120, 23);
 
         internalFrame1.add(FormInput, java.awt.BorderLayout.PAGE_START);
 
@@ -1104,6 +1128,12 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     for(i=0;i<tbResep.getRowCount();i++){
                         tbResep.setValueAt("",i,1);
                     }
+                    if(Jeniskelas1.getSelectedIndex()==0){
+                        lokasi="IFRS";
+                    }else if(Jeniskelas1.getSelectedIndex()==1){
+                        lokasi="DEPO";
+                    }
+                    Sequel.menyimpan("resep_obat_tambahan","'"+NoResep.getText()+"','"+TNoRw.getText()+"','"+lokasi+"'");
                     Valid.tabelKosong(tabModeResepRacikan);
                     Valid.tabelKosong(tabModeDetailResepRacikan);
                     dispose();
@@ -1372,6 +1402,20 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         // TODO add your handling code here:
     }//GEN-LAST:event_ChkRMActionPerformed
 
+    private void Jeniskelas1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_Jeniskelas1ItemStateChanged
+        if(Jeniskelas1.getSelectedIndex()==0){
+            bangsal="BFAR";
+            tampilobat();
+        }else if(Jeniskelas1.getSelectedIndex()==1){
+            bangsal="DPOK";
+            tampilobat();
+        }
+    }//GEN-LAST:event_Jeniskelas1ItemStateChanged
+
+    private void Jeniskelas1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Jeniskelas1KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Jeniskelas1KeyPressed
+
     /**
     * @param args the command line arguments
     */
@@ -1402,6 +1446,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private widget.Tanggal DTPBeri;
     private widget.PanelBiasa FormInput;
     private widget.ComboBox Jeniskelas;
+    private widget.ComboBox Jeniskelas1;
     private widget.TextBox KdDokter;
     private widget.TextBox KdPj;
     private widget.Label LPpn;
@@ -1431,6 +1476,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private widget.Label jLabel9;
     private javax.swing.JPanel jPanel3;
     private widget.Label label12;
+    private widget.Label label13;
     private widget.Label label9;
     private widget.panelisi panelisi3;
     private javax.swing.JMenuItem ppBersihkan;
@@ -1440,7 +1486,8 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private widget.Table tbResep;
     // End of variables declaration//GEN-END:variables
 
-    public void tampilobat() {        
+    public void tampilobat() {   
+        Valid.tabelKosong(tabModeResep); 
         z=0;
         for(i=0;i<tbResep.getRowCount();i++){
             if(!tbResep.getValueAt(i,0).toString().equals("")){
@@ -1496,7 +1543,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 namajenis[z]=tbResep.getValueAt(i,7).toString();
                 aturan[z]=tbResep.getValueAt(i,8).toString();
                 industri[z]=tbResep.getValueAt(i,9).toString();
-                kandungan[z]=tbResep.getValueAt(i,15).toString();
+                kandungan[z]=tbResep.getValueAt(i,12).toString();
                 
                 try {
                     beli[z]=Double.parseDouble(tbResep.getValueAt(i,10).toString());
@@ -1675,9 +1722,19 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             if(bangsal.equals("")){
                 bangsal=bangsaldefault;
             }
+            if(bangsal.equals("DPOK")){
+                Jeniskelas1.setSelectedIndex(1);
+            }else{
+                Jeniskelas1.setSelectedIndex(0);   
+            }
         }else if(status.equals("ranap")){
             bangsal=akses.getkdbangsal();
-        }            
+            if(bangsal.equals("DPOK")){
+                Jeniskelas1.setSelectedIndex(1);
+            }else{
+                Jeniskelas1.setSelectedIndex(0);   
+            }  
+        }                        
     }
     
     public void setNoRm(String norwt,Date tanggal, String jam,String menit,String detik,String KodeDokter,String NamaDokter,String status) {        

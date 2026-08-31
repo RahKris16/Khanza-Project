@@ -643,7 +643,7 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Pilih poli terlebih dahulu");
         } else if (kode_dokter == "") {
             JOptionPane.showMessageDialog(rootPane, "Pilih Dokter terlebih dahulu");
-        } else if (Sequel.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString() + "") + "' and jadwal_cuti_libur.kd_dokter='" + kode_dokter + "' and jadwal_cuti_libur.kd_poli='" + kode_poli + "' ") > 0) {
+        } else if (Sequel.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString() + "") + "' and jadwal_cuti_libur.kd_dokter='" + kode_dokter + "' ") > 0) {
             JOptionPane.showMessageDialog(rootPane, "Maaf, dokter  tidak berpraktek pada tanggal yang anda pilih ");
         } else if (Sequel.cariInteger("select count(no_rkm_medis) from reg_periksa where no_rkm_medis='" + lblNoRM.getText() + "' and kd_poli='" + kode_poli + "' and kd_dokter='" + kode_dokter + "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + "' ") > 0) {
             JOptionPane.showMessageDialog(rootPane, "Maaf, anda sudah terdaftar pada hari ini dengan dokter yang sama ");
@@ -944,8 +944,36 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
                     break;
             }
         }
+        
+        // --- FIX DUPLIKAT NO_RAWAT ANJUNGAN MANDIRI vs MOBILE JKN BOOKING ---
+        // Sebelumnya nomor urut hanya dihitung dari MAX(no_rawat) di reg_periksa untuk tanggal tsb.
+        // Padahal pasien Mobile JKN yang sudah booking jauh hari sebelumnya sudah mendapat no_rawat
+        // yang tersimpan di referensi_mobilejkn_bpjs (kolom tanggalperiksa) walau baris reg_periksa-nya
+        // belum ada (belum checkin). Akibatnya anjungan bisa generate no_rawat yang sama dengan nomor
+        // yang sudah "dijatah" untuk pasien booking tsb. Solusi: ambil MAX dari KEDUA tabel, pilih yang
+        // paling besar, baru increment.
+        String tglPeriksaAnjungan = Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString());
+        String prefixNoRawatAnjungan = tglPeriksaAnjungan.replaceAll("-", "/") + "/";
 
-        Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString()) + "' ",dateformat.format(TanggalPeriksa.getDate())+ "/", 6, NoRawat);
+        int maxRegPeriksa = Sequel.cariInteger("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + tglPeriksaAnjungan + "'");
+        int maxReferensiMjkn = Sequel.cariInteger("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from referensi_mobilejkn_bpjs where tanggalperiksa='" + tglPeriksaAnjungan + "'");
+
+        if (maxReferensiMjkn >= maxRegPeriksa) {
+            Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from referensi_mobilejkn_bpjs where tanggalperiksa='" + tglPeriksaAnjungan + "'",
+                    prefixNoRawatAnjungan, 6, TNoRw);
+        } else {
+            Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + tglPeriksaAnjungan + "'",
+                    prefixNoRawatAnjungan, 6, TNoRw);
+        }
+
+        // Safety-net tambahan: jika ternyata TNoRw hasil generate masih bentrok (mis. dua anjungan
+        // klik simpan nyaris bersamaan), naikkan manual sampai benar-benar unik di kedua tabel.
+        while (Sequel.cariInteger("select count(*) from reg_periksa where no_rawat='" + TNoRw.getText() + "'") > 0
+                || Sequel.cariInteger("select count(*) from referensi_mobilejkn_bpjs where no_rawat='" + TNoRw.getText() + "'") > 0) {
+            int nomorBerikutnya = Integer.parseInt(TNoRw.getText().substring(TNoRw.getText().length() - 6)) + 1;
+            TNoRw.setText(prefixNoRawatAnjungan + String.format("%06d", nomorBerikutnya));
+        }
+//        Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(no_rawat,6),signed)),0) from reg_periksa where tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString()) + "' ",dateformat.format(TanggalPeriksa.getDate())+ "/", 6, NoRawat);
     }
 
     private void tampilPenjab() {

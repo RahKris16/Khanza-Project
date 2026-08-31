@@ -4025,14 +4025,16 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
             param.put("kontakrs",akses.getkontakrs());
             param.put("emailrs",akses.getemailrs());
             param.put("logo",Sequel.cariGambar("select logo from setting"));
-            Valid.MyReportqry("rptBarcodeRM.jasper","report","::[ Label Rekam Medis ]::","select pasien.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp, pasien.jk, "+
-                "pasien.tmp_lahir, pasien.tgl_lahir,pasien.nm_ibu, concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat, pasien.gol_darah, pasien.pekerjaan,"+
-                "pasien.stts_nikah,pasien.agama,pasien.tgl_daftar,pasien.no_tlp,pasien.umur,"+
-                "pasien.pnd, pasien.keluarga, pasien.namakeluarga,penjab.png_jawab,pasien.pekerjaanpj,"+
-                "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj,', ',pasien.propinsipj) as alamatpj from pasien "+
-                "inner join reg_periksa inner join kelurahan inner join kecamatan inner join kabupaten "+
-                "inner join penjab inner join propinsi on reg_periksa.no_rkm_medis=pasien.no_rkm_medis and pasien.kd_prop=propinsi.kd_prop and pasien.kd_pj=penjab.kd_pj and pasien.kd_kel=kelurahan.kd_kel "+
-                "and pasien.kd_kec=kecamatan.kd_kec and pasien.kd_kab=kabupaten.kd_kab  where reg_periksa.no_rawat='"+NoRawat+"' ",param);
+            Valid.MyReportqry("rptBarcodeRM.jasper","report","::[ Label Rekam Medis ]::","select if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',rp.no_reg) as no_reg ,\n" +
+                "p.no_rkm_medis, p.nm_pasien,p.jk,p.tgl_lahir,p.umur,p3.png_jawab,\n" +
+                "if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',d.nm_dokter) as nm_dokter,\n" +
+                "if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',p2.nm_poli) as nm_poli \n" +
+                "from reg_periksa rp\n" +
+                "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                "inner join dokter d on d.kd_dokter=rp.kd_dokter \n" +
+                "inner join poliklinik p2 on p2.kd_poli=rp.kd_poli\n" +
+                "inner join penjab p3 on p3.kd_pj =rp.kd_pj\n" +
+                "where rp.no_rawat='"+NoRawat+"' ",param);
             this.setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_MnBarcodeRMActionPerformed
@@ -4050,14 +4052,16 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
             param.put("kontakrs",akses.getkontakrs());
             param.put("emailrs",akses.getemailrs());
             param.put("logo",Sequel.cariGambar("select logo from setting"));
-            Valid.MyReportqry("rptBarcodeRM.jasper","report","::[ Label Rekam Medis ]::","select pasien.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp, pasien.jk, "+
-                "pasien.tmp_lahir, pasien.tgl_lahir,pasien.nm_ibu, concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat, pasien.gol_darah, pasien.pekerjaan,"+
-                "pasien.stts_nikah,pasien.agama,pasien.tgl_daftar,pasien.no_tlp,pasien.umur,"+
-                "pasien.pnd, pasien.keluarga, pasien.namakeluarga,penjab.png_jawab,pasien.pekerjaanpj,"+
-                "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj,', ',pasien.propinsipj) as alamatpj from pasien "+
-                "inner join reg_periksa inner join kelurahan inner join kecamatan inner join kabupaten "+
-                "inner join penjab inner join propinsi on reg_periksa.no_rkm_medis=pasien.no_rkm_medis and pasien.kd_prop=propinsi.kd_prop and pasien.kd_pj=penjab.kd_pj and pasien.kd_kel=kelurahan.kd_kel "+
-                "and pasien.kd_kec=kecamatan.kd_kec and pasien.kd_kab=kabupaten.kd_kab  where reg_periksa.no_rawat='"+NoRawat+"' ",param);
+            Valid.MyReportqry("rptBarcodeRM.jasper","report","::[ Label Rekam Medis ]::","select if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',rp.no_reg) as no_reg ,\n" +
+                "p.no_rkm_medis, p.nm_pasien,p.jk,p.tgl_lahir,p.umur,p3.png_jawab,\n" +
+                "if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',d.nm_dokter) as nm_dokter,\n" +
+                "if(p2.kd_poli='IGD' or p2.kd_poli='U0024' or p2.kd_poli='U0025' or p2.kd_poli='U0027' or p2.kd_poli='U0031'or p2.kd_poli='U0032' or p2.kd_poli='U0033' or p2.kd_poli='U0034','',p2.nm_poli) as nm_poli \n" +
+                "from reg_periksa rp\n" +
+                "inner join pasien p on p.no_rkm_medis=rp.no_rkm_medis\n" +
+                "inner join dokter d on d.kd_dokter=rp.kd_dokter \n" +
+                "inner join poliklinik p2 on p2.kd_poli=rp.kd_poli\n" +
+                "inner join penjab p3 on p3.kd_pj =rp.kd_pj\n" +
+                "where rp.no_rawat='"+NoRawat+"' ",param);
             this.setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_MnBarcodeRM1ActionPerformed

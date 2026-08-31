@@ -643,7 +643,7 @@ public class DlgRegistrasiWalkIn extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Pilih poli terlebih dahulu");
         } else if (kode_dokter == "") {
             JOptionPane.showMessageDialog(rootPane, "Pilih Dokter terlebih dahulu");
-        } else if (Sequel.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString() + "") + "' and jadwal_cuti_libur.kd_dokter='" + kode_dokter + "' and jadwal_cuti_libur.kd_poli='" + kode_poli + "' ") > 0) {
+        } else if (Sequel.cariInteger("select count(jadwal_cuti_libur.kd_dokter) from jadwal_cuti_libur where jadwal_cuti_libur.tanggallibur='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem().toString() + "") + "' and jadwal_cuti_libur.kd_dokter='" + kode_dokter + "' ") > 0) {
             JOptionPane.showMessageDialog(rootPane, "Maaf, dokter  tidak berpraktek pada tanggal yang anda pilih ");
         } else if (Sequel.cariInteger("select count(no_rkm_medis) from reg_periksa where no_rkm_medis='" + lblNoRM.getText() + "' and kd_poli='" + kode_poli + "' and kd_dokter='" + kode_dokter + "' and tgl_registrasi='" + Valid.SetTgl(TanggalPeriksa.getSelectedItem() + "") + "' ") > 0) {
             JOptionPane.showMessageDialog(rootPane, "Maaf, anda sudah terdaftar pada hari ini dengan dokter yang sama ");

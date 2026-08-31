@@ -19,9 +19,12 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.DocumentEvent;
@@ -31,6 +34,11 @@ import kepegawaian.DlgCariDokter;
 import kepegawaian.DlgCariPegawai;
 import laporan.DlgBerkasRawat;
 import laporan.DlgDiagnosaPenyakit;
+import simrskhanza.DlgTanggalJamKontrolCustom;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 
 
 /**
@@ -42,12 +50,14 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
     private Connection koneksi=koneksiDB.condb();
     private sekuel Sequel=new sekuel();
     private validasi Valid=new validasi();
-    private PreparedStatement ps,ps2;
-    private ResultSet rs,rs2;
+    private PreparedStatement ps,ps2,psJadwal;
+    private ResultSet rs,rs2,rsJadwal;
     private int i=0;    
     private DlgCariPegawai dokter=new DlgCariPegawai(null,false);
     private RMCariHasilLaborat2 carilaborat=new RMCariHasilLaborat2(null,false);
-    private String kodekamar="",namakamar="",tglkeluar="",jamkeluar="",finger="",finger2="",tanggal="";
+    private String kodekamar="",namakamar="",tglkeluar="",jamkeluar="",finger="",finger2="",tanggal="",tglKontrolOtomatis="",
+            NoSKDP="",NoSuratKontrol="";
+    private static final String KODE_DOKTER_FORM_INI = "B17102226";
     
     /** Creates new form DlgRujuk
      * @param parent
@@ -207,8 +217,19 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        KdDokter = new widget.TextBox();
+        NmDokter = new widget.TextBox();
+        KdPoli = new widget.TextBox();
+        KdPoli1 = new widget.TextBox();
+        NmPoli = new widget.TextBox();
+        NoSEP = new widget.TextBox();
+        NoRujukan = new widget.TextBox();
+        TglRujukan = new widget.TextBox();
+        SttsRujukan = new widget.TextBox();
+        NoSEP1 = new widget.TextBox();
         jPopupMenu1 = new javax.swing.JPopupMenu();
         MnLaporanResume = new javax.swing.JMenuItem();
+        MnSKDP = new javax.swing.JMenuItem();
         internalFrame1 = new widget.InternalFrame();
         Scroll = new widget.ScrollPane();
         tbObat = new widget.Table();
@@ -273,6 +294,49 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         Program1 = new widget.TextBox();
         DTPTgl = new widget.Tanggal();
         jLabel26 = new widget.Label();
+        BtnEdit10 = new widget.Button();
+        ChkKontrol = new widget.CekBox();
+        jLabel58 = new widget.Label();
+
+        KdDokter.setEditable(false);
+        KdDokter.setHighlighter(null);
+        KdDokter.setName("KdDokter"); // NOI18N
+
+        NmDokter.setEditable(false);
+        NmDokter.setHighlighter(null);
+        NmDokter.setName("NmDokter"); // NOI18N
+
+        KdPoli.setEditable(false);
+        KdPoli.setHighlighter(null);
+        KdPoli.setName("KdPoli"); // NOI18N
+
+        KdPoli1.setEditable(false);
+        KdPoli1.setHighlighter(null);
+        KdPoli1.setName("KdPoli1"); // NOI18N
+
+        NmPoli.setEditable(false);
+        NmPoli.setHighlighter(null);
+        NmPoli.setName("NmPoli"); // NOI18N
+
+        NoSEP.setEditable(false);
+        NoSEP.setHighlighter(null);
+        NoSEP.setName("NoSEP"); // NOI18N
+
+        NoRujukan.setEditable(false);
+        NoRujukan.setHighlighter(null);
+        NoRujukan.setName("NoRujukan"); // NOI18N
+
+        TglRujukan.setEditable(false);
+        TglRujukan.setHighlighter(null);
+        TglRujukan.setName("TglRujukan"); // NOI18N
+
+        SttsRujukan.setEditable(false);
+        SttsRujukan.setHighlighter(null);
+        SttsRujukan.setName("SttsRujukan"); // NOI18N
+
+        NoSEP1.setEditable(false);
+        NoSEP1.setHighlighter(null);
+        NoSEP1.setName("NoSEP1"); // NOI18N
 
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
@@ -289,6 +353,20 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
             }
         });
         jPopupMenu1.add(MnLaporanResume);
+
+        MnSKDP.setBackground(new java.awt.Color(255, 255, 254));
+        MnSKDP.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        MnSKDP.setForeground(new java.awt.Color(50, 50, 50));
+        MnSKDP.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        MnSKDP.setText("Cetak SKDP");
+        MnSKDP.setName("MnSKDP"); // NOI18N
+        MnSKDP.setPreferredSize(new java.awt.Dimension(220, 26));
+        MnSKDP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MnSKDPActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(MnSKDP);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -479,7 +557,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         panelGlass9.add(jLabel19);
 
         DTPCari1.setForeground(new java.awt.Color(50, 70, 50));
-        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        DTPCari1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "26-08-2026" }));
         DTPCari1.setDisplayFormat("dd-MM-yyyy");
         DTPCari1.setName("DTPCari1"); // NOI18N
         DTPCari1.setOpaque(false);
@@ -493,7 +571,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         panelGlass9.add(jLabel21);
 
         DTPCari2.setForeground(new java.awt.Color(50, 70, 50));
-        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        DTPCari2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "26-08-2026" }));
         DTPCari2.setDisplayFormat("dd-MM-yyyy");
         DTPCari2.setName("DTPCari2"); // NOI18N
         DTPCari2.setOpaque(false);
@@ -606,7 +684,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
             }
         });
         FormInput.add(TPasien);
-        TPasien.setBounds(361, 15, 424, 23);
+        TPasien.setBounds(348, 15, 328, 23);
 
         TNoRM.setEditable(false);
         TNoRM.setHighlighter(null);
@@ -617,7 +695,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
             }
         });
         FormInput.add(TNoRM);
-        TNoRM.setBounds(247, 15, 112, 23);
+        TNoRM.setBounds(247, 15, 100, 23);
 
         scrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane2.setName("scrollPane2"); // NOI18N
@@ -874,7 +952,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         Program1.setBounds(312, 83, 70, 23);
 
         DTPTgl.setForeground(new java.awt.Color(50, 70, 50));
-        DTPTgl.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "27-01-2026" }));
+        DTPTgl.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "26-08-2026" }));
         DTPTgl.setDisplayFormat("dd-MM-yyyy");
         DTPTgl.setName("DTPTgl"); // NOI18N
         DTPTgl.setOpaque(false);
@@ -890,6 +968,40 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         jLabel26.setName("jLabel26"); // NOI18N
         FormInput.add(jLabel26);
         jLabel26.setBounds(520, 50, 60, 23);
+
+        BtnEdit10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/save-16x16.png"))); // NOI18N
+        BtnEdit10.setMnemonic('G');
+        BtnEdit10.setText("Custom");
+        BtnEdit10.setToolTipText("Alt+G");
+        BtnEdit10.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnEdit10.setName("BtnEdit10"); // NOI18N
+        BtnEdit10.setPreferredSize(new java.awt.Dimension(100, 30));
+        BtnEdit10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEdit10ActionPerformed(evt);
+            }
+        });
+        BtnEdit10.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnEdit10KeyPressed(evt);
+            }
+        });
+        FormInput.add(BtnEdit10);
+        BtnEdit10.setBounds(700, 115, 100, 30);
+
+        ChkKontrol.setBorder(null);
+        ChkKontrol.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        ChkKontrol.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ChkKontrol.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        ChkKontrol.setName("ChkKontrol"); // NOI18N
+        FormInput.add(ChkKontrol);
+        ChkKontrol.setBounds(705, 155, 23, 23);
+
+        jLabel58.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel58.setText("Tidak Kontrol");
+        jLabel58.setName("jLabel58"); // NOI18N
+        FormInput.add(jLabel58);
+        jLabel58.setBounds(730, 155, 90, 23);
 
         scrollInput.setViewportView(FormInput);
 
@@ -920,21 +1032,42 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         }else if(KodeDokter.getText().equals("")||NamaDokter.getText().equals("")){
             Valid.textKosong(BtnDokter,"Dokter Penanggung Jawab");
         }else{
-            if(Sequel.menyimpantf("program_terapi","?,?,?,?,?,?,?,?,?,?,?,?,?","No.Rawat",13,new String[]{
-                    TNoRw.getText(),KodeDokter.getText(),Program.getText(),KetSubjective.getText(),
-                    Tensi.getText(),Suhu.getText(),Nadi.getText(),Respi.getText(),Kesadaran.getSelectedItem().toString(),Objective.getText(),
-                    Assesment.getText(),Plan.getText(),Valid.SetTgl(DTPTgl.getSelectedItem()+"")
-                })==true){
-                    tabMode.addRow(new String[]{
-                    TNoRw.getText(),TNoRM.getText(),TPasien.getText(),KodeDokter.getText(),NamaDokter.getText(),Program.getText(),KetSubjective.getText(),
-                    Tensi.getText(),Suhu.getText(),Nadi.getText(),Respi.getText(),Kesadaran.getSelectedItem().toString(),Objective.getText(),
-                    Assesment.getText(),Plan.getText()
-                    });
-                    Sequel.menyimpan2("pemeriksaan_ralan","'"+TNoRw.getText()+"','"+Valid.SetTgl(DTPTgl.getSelectedItem()+"")+"',CURTIME(),'"+Suhu.getText()+"','"+Tensi.getText()+"','"+Nadi.getText()+
-                    "','"+Respi.getText()+"','','','','','"+Kesadaran.getSelectedItem()+"','Program ke "+Program.getText()+"\\n"+KetSubjective.getText()+"','"+
-                    Objective.getText()+"','','','','"+Assesment.getText()+"','"+Plan.getText()+"','','"+KodeDokter.getText()+"'","No.Rawat");
-                    emptTeks();
-                    LCount.setText(""+tabMode.getRowCount());
+            // Lewati pengecekan & warning surat kontrol jika:
+            // 1) petugas menandai checkbox "Tidak Kontrol", ATAU
+            // 2) kunjungan ini adalah "Rujuk Internal" (bukan "Jawaban Rujuk Internal",
+            //    yang tetap mengikuti aturan/pengecekan seperti sebelumnya).
+            boolean bypassSuratKontrol = ChkKontrol.isSelected();
+
+            boolean perluSuratKontrol = !bypassSuratKontrol && Sequel.cariInteger(
+                "SELECT COUNT(rp.no_rawat) FROM bridging_sep bs "
+              + "INNER JOIN reg_periksa rp ON rp.no_rawat = bs.no_rawat "
+              + "LEFT JOIN skdp sd ON sd.no_rawat = rp.no_rawat\n"
+              + "LEFT JOIN surat_kontrol skn ON skn.no_rawat = rp.no_rawat "
+              + "WHERE rp.no_rawat=? AND rp.kd_pj='BPJ' "
+              + "AND rp.kd_poli not in ('IGD','U0023','U0024','U0025','U0022','U0026','U0027','U0028',"
+              + "'U0029','U0031','U0032','U0033','U0034','U0036','U0037','U0038','U0040') "
+              + "AND sd.no_rawat IS NULL AND skn.no_rawat IS NULL",
+                TNoRw.getText()) > 0;
+
+            if (perluSuratKontrol) {
+                JOptionPane.showMessageDialog(null,"Maaf, Silahkan buat surat kontrol terlebih dahulu..!!!");
+            } else {
+                if(Sequel.menyimpantf("program_terapi","?,?,?,?,?,?,?,?,?,?,?,?,?","No.Rawat",13,new String[]{
+                        TNoRw.getText(),KodeDokter.getText(),Program.getText(),KetSubjective.getText(),
+                        Tensi.getText(),Suhu.getText(),Nadi.getText(),Respi.getText(),Kesadaran.getSelectedItem().toString(),Objective.getText(),
+                        Assesment.getText(),Plan.getText(),Valid.SetTgl(DTPTgl.getSelectedItem()+"")
+                    })==true){
+                        tabMode.addRow(new String[]{
+                        TNoRw.getText(),TNoRM.getText(),TPasien.getText(),KodeDokter.getText(),NamaDokter.getText(),Program.getText(),KetSubjective.getText(),
+                        Tensi.getText(),Suhu.getText(),Nadi.getText(),Respi.getText(),Kesadaran.getSelectedItem().toString(),Objective.getText(),
+                        Assesment.getText(),Plan.getText()
+                        });
+                        Sequel.menyimpan2("pemeriksaan_ralan","'"+TNoRw.getText()+"','"+Valid.SetTgl(DTPTgl.getSelectedItem()+"")+"',CURTIME(),'"+Suhu.getText()+"','"+Tensi.getText()+"','"+Nadi.getText()+
+                        "','"+Respi.getText()+"','','','','','"+Kesadaran.getSelectedItem()+"','Program ke "+Program.getText()+"\\n"+KetSubjective.getText()+"','"+
+                        Objective.getText()+"','','','','"+Assesment.getText()+"','"+Plan.getText()+"','','"+KodeDokter.getText()+"'","No.Rawat");
+                        emptTeks();
+                        LCount.setText(""+tabMode.getRowCount());
+                }
             }
         }
 }//GEN-LAST:event_BtnSimpanActionPerformed
@@ -1338,6 +1471,62 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnSimpan1KeyPressed
 
+    private void BtnEdit10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEdit10ActionPerformed
+        if(TNoRw.getText().trim().equals("")){
+            Valid.textKosong(TNoRw,"Pasien");
+        }else if(KodeDokter.getText().trim().equals("")){
+            Valid.textKosong(KodeDokter,"Dokter");
+        }else{
+            DlgTanggalJamKontrolCustom dlgTglCustom = new DlgTanggalJamKontrolCustom(null, true);
+            dlgTglCustom.setLocationRelativeTo(internalFrame1);
+            dlgTglCustom.setVisible(true); // modal, kode di bawah baru jalan setelah dialog ditutup
+
+            if(dlgTglCustom.isSimpanDiklik()){
+                String tglPilihanCustom = dlgTglCustom.getTanggalTerpilih();
+                String jamAwalCustom = dlgTglCustom.getJamTerpilih();
+                if(tglPilihanCustom == null || tglPilihanCustom.trim().equals("")){
+                    JOptionPane.showMessageDialog(null,"Tanggal kontrol tidak valid, silahkan coba lagi...!");
+                }else{
+                    prosesSuratKontrol(tglPilihanCustom, " ", jamAwalCustom);
+                }
+            }
+        }
+    }//GEN-LAST:event_BtnEdit10ActionPerformed
+
+    private void BtnEdit10KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnEdit10KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BtnEdit10KeyPressed
+
+    private void MnSKDPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSKDPActionPerformed
+        if(tbObat.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Map<String, Object> param = new HashMap<>();  
+                param.put("namars",akses.getnamars());
+                param.put("alamatrs",akses.getalamatrs());
+                param.put("kotars",akses.getkabupatenrs());
+                param.put("propinsirs",akses.getpropinsirs());
+                param.put("kontakrs",akses.getkontakrs());
+                param.put("emailrs",akses.getemailrs());   
+                param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
+                finger="B17102226";
+                param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh dr. I Komang Gede Dwi Maya Rustadi, Sp.KFR\nID B17102226\n"+tbObat.getValueAt(tbObat.getSelectedRow(),15).toString());
+                Valid.MyReportqry("rptSuratKeteranganDalamPerawatan.jasper","report","::[ SKDP ]::",
+                    "SELECT s.no_skdp,s.no_rawat,DATE_FORMAT(s.tanggal_surat,'%d-%m-%Y') as tanggal_surat,s.no_rkm_medis,p.nm_pasien,CONCAT(rp.umurdaftar,' ',rp.sttsumur) as umur,s.no_rujukan,\n" +
+                    "DATE_FORMAT(bs.tglrujukan,'%d-%m-%Y') as tglrujukan,DATE_FORMAT(DATE_ADD(bs.tglrujukan, INTERVAL 90 DAY),'%d-%m-%Y') AS expired,DATE_FORMAT(s.tanggal_kontrol,'%d-%m-%Y') as tanggal_kontrol,\n" +
+                    "s.diagnosa,s.rtl,s.kd_dokter,d.nm_dokter,IFNULL(jf.jam,\"\") as jam \n" +
+                    "FROM skdp s\n" +
+                    "inner join pasien p on p.no_rkm_medis=s.no_rkm_medis\n" +
+                    "inner join reg_periksa rp on rp.no_rawat =s.no_rawat\n" +
+                    "inner join bridging_sep bs on bs.no_rujukan =s.no_rujukan and bs.no_rawat =s.no_rawat\n" +
+                    "inner join dokter d on d.kd_dokter =s.kd_dokter \n" +
+                    "left join jadwal_fisio jf on jf.no_surat =s.no_skdp \n" +
+                    "WHERE s.no_rawat='"+TNoRw.getText()+"'",param);
+                this.setCursor(Cursor.getDefaultCursor());
+        }else{
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih terlebih dulu data yang mau anda hapus...\n Klik data pada table untuk memilih data...!!!!");
+        }
+    }//GEN-LAST:event_MnSKDPActionPerformed
+
     /**
     * @param args the command line arguments
     */
@@ -1362,23 +1551,34 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
     private widget.Button BtnDokter;
     private widget.Button BtnDokter19;
     private widget.Button BtnEdit;
+    private widget.Button BtnEdit10;
     private widget.Button BtnHapus;
     private widget.Button BtnKeluar;
     private widget.Button BtnPrint;
     private widget.Button BtnSimpan;
     private widget.Button BtnSimpan1;
     private widget.CekBox ChkInput;
+    private widget.CekBox ChkKontrol;
     private widget.Tanggal DTPCari1;
     private widget.Tanggal DTPCari2;
     private widget.Tanggal DTPTgl;
     private widget.PanelBiasa FormInput;
+    private widget.TextBox KdDokter;
+    private widget.TextBox KdPoli;
+    private widget.TextBox KdPoli1;
     private widget.ComboBox Kesadaran;
     private widget.TextArea KetSubjective;
     private widget.TextBox KodeDokter;
     private widget.Label LCount;
     private javax.swing.JMenuItem MnLaporanResume;
+    private javax.swing.JMenuItem MnSKDP;
     private widget.TextBox Nadi;
     private widget.TextBox NamaDokter;
+    private widget.TextBox NmDokter;
+    private widget.TextBox NmPoli;
+    private widget.TextBox NoRujukan;
+    private widget.TextBox NoSEP;
+    private widget.TextBox NoSEP1;
     private widget.TextArea Objective;
     private javax.swing.JPanel PanelInput;
     private widget.TextArea Plan;
@@ -1386,12 +1586,14 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
     private widget.TextBox Program1;
     private widget.TextBox Respi;
     private widget.ScrollPane Scroll;
+    private widget.TextBox SttsRujukan;
     private widget.TextBox Suhu;
     private widget.TextBox TCari;
     private widget.TextBox TNoRM;
     private widget.TextBox TNoRw;
     private widget.TextBox TPasien;
     private widget.TextBox Tensi;
+    private widget.TextBox TglRujukan;
     private widget.InternalFrame internalFrame1;
     private widget.Label jLabel16;
     private widget.Label jLabel18;
@@ -1408,6 +1610,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
     private widget.Label jLabel46;
     private widget.Label jLabel47;
     private widget.Label jLabel5;
+    private widget.Label jLabel58;
     private widget.Label jLabel6;
     private widget.Label jLabel7;
     private javax.swing.JPanel jPanel3;
@@ -1479,6 +1682,7 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         Objective.setText("");
         Assesment.setText("");
         Plan.setText("");
+        ChkKontrol.setSelected(false);
     } 
 
     private void getData() {
@@ -1599,6 +1803,29 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         DTPCari2.setDate(tgl2);    
         isRawat();              
         isForm();
+        KdDokter.setText(Sequel.cariIsi("SELECT bs.kddpjp from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        NoSEP.setText(Sequel.cariIsi("SELECT bs.no_sep from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        NoRujukan.setText(Sequel.cariIsi("SELECT bs.no_rujukan from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        SttsRujukan.setText(Sequel.cariIsi("SELECT DISTINCT CASE WHEN DATEDIFF(CURDATE(), bs.tglrujukan) > 90 THEN 'Tidak Aktif' ELSE 'Aktif' END AS status_rujukan\n" +
+            "FROM bridging_sep bs WHERE bs.no_rujukan = ?",NoRujukan.getText()));
+        if(NoRujukan.getText().trim().length()>12 && NoRujukan.getText().trim().charAt(12)=='V'){
+            NoSEP1.setText(Sequel.cariIsi("SELECT bs.no_sep FROM bridging_sep bs\n" +
+                "INNER JOIN reg_periksa rp ON rp.no_rawat = bs.no_rawat\n" +
+                "WHERE rp.no_rkm_medis = ? AND SUBSTRING(bs.no_rujukan, 13, 1) IN ('P','Y') AND DATEDIFF(CURDATE(), bs.tglrujukan) < 90\n" +
+                "ORDER BY bs.tglsep DESC LIMIT 1",norm));
+            if(!NoSEP1.getText().trim().isEmpty()){
+                NoRujukan.setText(Sequel.cariIsi("SELECT bs.no_rujukan from bridging_sep bs WHERE bs.no_sep =?",NoSEP1.getText()));
+                SttsRujukan.setText(Sequel.cariIsi("SELECT DISTINCT CASE WHEN DATEDIFF(CURDATE(), bs.tglrujukan) > 90 THEN 'Tidak Aktif' ELSE 'Aktif' END AS status_rujukan\n" +
+                    "FROM bridging_sep bs WHERE bs.no_rujukan = ?",NoRujukan.getText()));
+            }
+        }else{
+            NoSEP1.setText("");
+        }
+        TglRujukan.setText(Sequel.cariIsi("SELECT bs.tglrujukan from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        KdPoli.setText(Sequel.cariIsi("SELECT bs.kdpolitujuan from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        KdPoli1.setText(Sequel.cariIsi("SELECT kd_poli_rs from maping_poli_bpjs bs WHERE kd_poli_bpjs =?",KdPoli.getText()));
+        NmDokter.setText(Sequel.cariIsi("SELECT bs.nmdpjplayanan from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
+        NmPoli.setText(Sequel.cariIsi("SELECT bs.nmpolitujuan from bridging_sep bs WHERE bs.no_rawat =? and bs.jnspelayanan ='2'",norwt));
     }
     
     private void isForm(){
@@ -1638,7 +1865,8 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
         BtnHapus.setEnabled(akses.getdata_resume_pasien());
         BtnEdit.setEnabled(akses.getdata_resume_pasien());
         BtnPrint.setEnabled(akses.getdata_resume_pasien());    
-        BtnSimpan1.setEnabled(akses.getedit_registrasi());    
+        BtnSimpan1.setEnabled(akses.getedit_registrasi());
+        ChkKontrol.setSelected(false);
         if(akses.getjml2()>=1){
             KodeDokter.setEditable(false);
             BtnDokter.setEnabled(false);
@@ -1691,6 +1919,321 @@ public final class RMProgramTerapi extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null,"Gagal menghapus..!!");
         }
     }
-
     
+    private String generateNoSurat(String prefix, String table, String kolom) {
+        String tgl = new java.text.SimpleDateFormat("ddMMyyyy").format(new java.util.Date());
+        String awalan = prefix + tgl;
+        int urut = 1;
+        try {
+            String maxNo = Sequel.cariIsi(
+                "SELECT MAX(" + kolom + ") FROM " + table + " WHERE " + kolom + " LIKE '" + awalan + "%'"
+            );
+            if (maxNo != null && maxNo.trim().length() == awalan.length() + 3) {
+                urut = Integer.parseInt(maxNo.trim().substring(awalan.length())) + 1;
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi generateNoSurat : " + e);
+        }
+        return awalan + String.format("%03d", urut);
+    }
+    
+    private boolean cekRujukanMasihAktif(String tglRujukanStr, String tglKontrolStr) {
+        final int BATAS_HARI_RUJUKAN = 90;
+        if (tglRujukanStr == null || tglRujukanStr.trim().isEmpty()
+                || tglKontrolStr == null || tglKontrolStr.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            // ambil 10 karakter pertama saja (yyyy-MM-dd), berjaga-jaga kalau field
+            // menyimpan format datetime (yyyy-MM-dd HH:mm:ss)
+            String tglRujukanOnly = tglRujukanStr.trim().length() >= 10
+                    ? tglRujukanStr.trim().substring(0, 10) : tglRujukanStr.trim();
+            String tglKontrolOnly = tglKontrolStr.trim().length() >= 10
+                    ? tglKontrolStr.trim().substring(0, 10) : tglKontrolStr.trim();
+
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            Date tglRujukan = sdf.parse(tglRujukanOnly);
+            Date tglKontrol = sdf.parse(tglKontrolOnly);
+
+            Calendar batas = Calendar.getInstance();
+            batas.setTime(tglRujukan);
+            batas.add(Calendar.DATE, BATAS_HARI_RUJUKAN);
+
+            // Masih aktif hanya jika tanggal kontrol STRICTLY sebelum batas 90 hari.
+            // VClaim BPJS sudah menolak tepat di hari ke-90 (pesan: "Masa Berlaku Habis,
+            // Maksimal 3(tiga) bulan dari tanggal rujukan"), jadi hari ke-90 itu sendiri
+            // harus dianggap Tidak Aktif, bukan Aktif.
+            return tglKontrol.before(batas.getTime());
+        } catch (Exception e) {
+            System.out.println("Notifikasi cekRujukanMasihAktif : " + e);
+            return false;
+        }
+    }
+    
+    private String formatTglTampilan(String tglYYYYMMDD){
+        if(tglYYYYMMDD == null || tglYYYYMMDD.trim().equals("")){
+            return tglYYYYMMDD;
+        }
+        try{
+            String[] pecah = tglYYYYMMDD.trim().split("-");
+            if(pecah.length == 3){
+                return pecah[2]+"-"+pecah[1]+"-"+pecah[0];
+            }
+        }catch(Exception e){
+        }
+        return tglYYYYMMDD;
+    }
+    
+    // Peta nomor hari (java.util.Calendar) ke nama hari sesuai enum kolom hari_kerja
+    // di tabel `jadwal` ('SENIN','SELASA','RABU','KAMIS','JUMAT','SABTU','AHAD').
+    // Dipakai bersama oleh cariTanggalKontrolOtomatis, hindariTanggalLiburDokter, dan hariDariTanggal.
+    private Map<Integer,String> mapHariKerja() {
+        Map<Integer,String> mapHari = new HashMap<>();
+        mapHari.put(Calendar.MONDAY,   "SENIN");
+        mapHari.put(Calendar.TUESDAY,  "SELASA");
+        mapHari.put(Calendar.WEDNESDAY,"RABU");
+        mapHari.put(Calendar.THURSDAY, "KAMIS");
+        mapHari.put(Calendar.FRIDAY,   "JUMAT");
+        mapHari.put(Calendar.SATURDAY, "SABTU");
+        mapHari.put(Calendar.SUNDAY,   "AKHAD");
+        return mapHari;
+    }
+
+    // Ambil semua hari_kerja (SENIN, SELASA, dst) tempat dokter tsb terdaftar praktek di tabel `jadwal`.
+    private Set<String> ambilHariPraktekDokter(String kdDokter) {
+        Set<String> hariPraktek = new HashSet<>();
+        try {
+            psJadwal = koneksi.prepareStatement(
+                "select distinct hari_kerja from jadwal where kd_dokter=?"
+            );
+            psJadwal.setString(1, kdDokter);
+            rsJadwal = psJadwal.executeQuery();
+            while (rsJadwal.next()) {
+                hariPraktek.add(rsJadwal.getString("hari_kerja").trim().toUpperCase());
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi ambilHariPraktekDokter : "+e);
+        } finally {
+            try {
+                if (rsJadwal != null) rsJadwal.close();
+                if (psJadwal != null) psJadwal.close();
+            } catch (Exception e) {
+                System.out.println("Notifikasi : "+e);
+            }
+        }
+        return hariPraktek;
+    }
+
+    // Nama hari (SENIN, SELASA, dst) dari sebuah tanggal berformat yyyy-MM-dd.
+    private String hariDariTanggal(String tglYYYYMMDD) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(sdf.parse(tglYYYYMMDD));
+            return mapHariKerja().get(cal.get(Calendar.DAY_OF_WEEK));
+        } catch (Exception e) {
+            System.out.println("Notifikasi hariDariTanggal : "+e);
+            return null;
+        }
+    }
+    
+    private String cariTanggalKontrolOtomatis(int hariMinimal) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, hariMinimal);
+
+        // Skip hari Minggu
+        while (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            cal.add(Calendar.DATE, 1);
+        }
+
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(cal.getTime());
+    }
+
+    // ================================================================
+    // POINT 2: Jika tanggal kontrol jatuh pada tanggal dokter "Tidak Praktek"
+    // (tabel jadwal_cuti_libur), otomatis maju ke tanggal praktek berikutnya
+    // sesuai hari kerja dokter (tabel jadwal), tanpa perlu konfirmasi DPJP.
+    // ================================================================
+    private String hindariTanggalLiburDokter(String kdDokter, String tglAwalYYYYMMDD) {
+        if (tglAwalYYYYMMDD == null || tglAwalYYYYMMDD.trim().isEmpty()) {
+            return tglAwalYYYYMMDD;
+        }
+
+        Set<String> hariPraktek = ambilHariPraktekDokter(kdDokter);
+        if (hariPraktek.isEmpty()) {
+            // Tidak ada jadwal praktek terdaftar sama sekali untuk dokter ini,
+            // tidak bisa dipakai patokan "tanggal praktek berikutnya" -> pakai tanggal apa adanya.
+            return tglAwalYYYYMMDD;
+        }
+
+        Map<Integer,String> mapHari = mapHariKerja();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(false);
+
+        Calendar cal = Calendar.getInstance();
+        try {
+            cal.setTime(sdf.parse(tglAwalYYYYMMDD));
+        } catch (Exception e) {
+            System.out.println("Notifikasi hindariTanggalLiburDokter (parse tanggal) : "+e);
+            return tglAwalYYYYMMDD;
+        }
+
+        int maxLoop = 30; // jaga-jaga supaya tidak muter tanpa henti kalau data cuti/libur tidak wajar
+        for (int i = 0; i < maxLoop; i++) {
+            String tglCek = sdf.format(cal.getTime());
+
+            boolean dokterLibur = Sequel.cariInteger(
+                "select count(*) from jadwal_cuti_libur where kd_dokter='"+kdDokter+"' "+
+                "and tanggallibur='"+tglCek+"' and status='Tidak Praktek'"
+            ) > 0;
+
+            if (!dokterLibur) {
+                return tglCek; // aman, dokter tidak sedang cuti/libur di tanggal ini
+            }
+
+            // Dokter libur di tanggal ini -> maju ke tanggal praktek berikutnya sesuai hari kerja dokter,
+            // lalu tanggal itu akan dicek ulang lagi (siapa tahu tanggal berikutnya juga kebetulan libur).
+            do {
+                cal.add(Calendar.DATE, 1);
+            } while (!hariPraktek.contains(mapHari.get(cal.get(Calendar.DAY_OF_WEEK))));
+        }
+
+        JOptionPane.showMessageDialog(null, "Tidak ditemukan tanggal praktek dokter yang tidak sedang cuti/libur, "
+                + "silahkan cek jadwal cuti/libur dokter di menu terkait.");
+        return null;
+    }
+
+    // ================================================================
+    // POINT 1: Pengingat kuota pasien pada tanggal kontrol yang akan dipakai.
+    // Kuota diambil dari tabel jadwal (kd_dokter + kd_poli + hari_kerja pada
+    // tanggal tsb), dibandingkan dengan jumlah pasien yang sudah terdaftar
+    // (reg_periksa) untuk dokter+poli+tanggal yang sama. Notifikasi HANYA
+    // muncul kalau kuota sudah penuh/terlampaui, dengan pilihan Ya/Tidak:
+    // - Ya   : lanjutkan tetap membuat surat kontrol/SKDP walau kuota penuh
+    // - Tidak: batal, tidak terjadi apa-apa
+    // Kalau kuota masih tersedia (atau datanya tidak ditemukan), langsung
+    // lanjut tanpa menampilkan notifikasi apapun.
+    // ================================================================
+    private boolean konfirmasiKuotaDokter(String kdDokter, String kdPoli, String tglYYYYMMDD) {
+        try {
+            String hariKerja = hariDariTanggal(tglYYYYMMDD);
+            if (hariKerja == null) {
+                return true; // gagal menentukan hari, jangan sampai memblokir proses simpan
+            }
+
+            int kuota = Sequel.cariInteger(
+                "select ifnull(sum(kuota),0) from jadwal where kd_dokter='"+kdDokter+"' "+
+                "and kd_poli='"+kdPoli+"' and hari_kerja='"+hariKerja+"'"
+            );
+
+            if (kuota <= 0) {
+                // Tidak ada data kuota terdaftar untuk kombinasi dokter/poli/hari ini -> tidak bisa dibandingkan.
+                return true;
+            }
+
+            // Jumlah pasien (unik berdasarkan no_rkm_medis, supaya pasien yang datanya
+            // dobel tidak dihitung 2x) yang SUDAH DIBUATKAN surat kontrol pada tanggal
+            // ini oleh dokter yang sama, digabung dari 3 tabel: skdp, surat_kontrol, dan
+            // bridging_surat_kontrol_bpjs. Tabel terakhir tidak punya no_rkm_medis
+            // langsung, jadi dicari lewat no_sep -> bridging_sep.no_rawat -> reg_periksa.no_rkm_medis.
+            int terisi = Sequel.cariInteger(
+                "select count(*) from ( "+
+                "  select no_rkm_medis from skdp "+
+                "    where kd_dokter='"+kdDokter+"' and tanggal_kontrol='"+tglYYYYMMDD+"' "+
+                "  union "+
+                "  select no_rkm_medis from surat_kontrol "+
+                "    where kd_dokter='"+kdDokter+"' and tanggal_kontrol='"+tglYYYYMMDD+"' "+
+                "  union "+
+                "  select rp.no_rkm_medis from bridging_surat_kontrol_bpjs bsk "+
+                "    inner join bridging_sep bs on bs.no_sep = bsk.no_sep "+
+                "    inner join reg_periksa rp on rp.no_rawat = bs.no_rawat "+
+                "    where bsk.kd_dokter_bpjs='"+kdDokter+"' and bsk.tgl_rencana='"+tglYYYYMMDD+"' "+
+                ") as gabungan_terisi"
+            );
+
+            if (terisi >= kuota) {
+                int pilihan = JOptionPane.showConfirmDialog(null,
+                        "Kuota pasien dr. "+NamaDokter.getText()+" pada tanggal "+formatTglTampilan(tglYYYYMMDD)+
+                        " sudah penuh ("+terisi+" dari kuota "+kuota+").\n"+
+                        "Tetap buat surat kontrol untuk tanggal tersebut?",
+                        "Kuota Dokter Sudah Penuh",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                return pilihan == JOptionPane.YES_OPTION;
+            }
+
+            return true; // kuota masih tersedia, lanjut tanpa notifikasi
+        } catch (Exception e) {
+            System.out.println("Notifikasi konfirmasiKuotaDokter : "+e);
+            return true; // kalau pengecekan gagal, jangan sampai memblokir proses simpan surat kontrol
+        }
+    }
+
+    private void prosesSuratKontrol(String tglKontrolOtomatisInput, String labelKontrol, String jamAwal) {
+        tglKontrolOtomatis = tglKontrolOtomatisInput;
+        
+        if(!cekRujukanMasihAktif(TglRujukan.getText().trim(), tglKontrolOtomatis)){
+            SttsRujukan.setText("Tidak Aktif");
+        }
+        if(SttsRujukan.getText().trim().equals("Aktif")){
+            NoSKDP = generateNoSurat("SKDP","skdp","no_skdp");
+                if(Sequel.menyimpantf("skdp","?,?,?,?,?,?,?,?,?","No.Surat",9,new String[]{
+                    NoSKDP,TNoRw.getText(),TNoRM.getText(),NoRujukan.getText(),Valid.SetTgl(DTPTgl.getSelectedItem()+""),tglKontrolOtomatis,
+                    Assesment.getText(),"",KODE_DOKTER_FORM_INI
+                    })==true){
+                    simpanJadwalFisio(NoSKDP, tglKontrolOtomatis, jamAwal);
+                    JOptionPane.showMessageDialog(null,"SKDP berhasil dibuat dan disimpan...!");
+                }else{
+                    JOptionPane.showMessageDialog(null,"SKDP gagal disimpan...!");
+                }
+            }else{
+                NoSuratKontrol = generateNoSurat("SK","surat_kontrol","no_surat_kontrol");
+                if(TglRujukan.getText().equals("")){
+                    if(Sequel.menyimpantf("surat_kontrol","?,?,?,?,?,?,?,?,?,?,?,?,?","No.Surat",13,new String[]{
+                        NoSuratKontrol,TNoRw.getText(),TNoRM.getText(),Valid.SetTgl(DTPTgl.getSelectedItem()+""),"0000:00:00",
+                        tglKontrolOtomatis,Assesment.getText(),"","","","","",KODE_DOKTER_FORM_INI
+                        })==true){
+                        simpanJadwalFisio(NoSuratKontrol, tglKontrolOtomatis, jamAwal);
+                        JOptionPane.showMessageDialog(null,"Surat Kontrol berhasil dibuat dan disimpan...!");
+                    }else{
+                        JOptionPane.showMessageDialog(null,"Surat Kontrol gagal disimpan...!");
+                    }
+                }else{
+                    if(Sequel.menyimpantf("surat_kontrol","?,?,?,?,?,?,?,?,?,?,?,?,?","No.Surat",13,new String[]{
+                        NoSuratKontrol,TNoRw.getText(),TNoRM.getText(),Valid.SetTgl(DTPTgl.getSelectedItem()+""),TglRujukan.getText(),
+                        tglKontrolOtomatis,Assesment.getText(),"","","","","",KODE_DOKTER_FORM_INI
+                        })==true){
+                        simpanJadwalFisio(NoSuratKontrol, tglKontrolOtomatis, jamAwal);
+                        JOptionPane.showMessageDialog(null,"Surat Kontrol berhasil dibuat dan disimpan...!");
+                    }else{
+                        JOptionPane.showMessageDialog(null,"Surat Kontrol gagal disimpan...!");
+                    }
+                }
+            }
+    }
+
+    /**
+     * Menyimpan jadwal fisioterapi (jam kontrol) ke tabel jadwal_fisio,
+     * dikaitkan dengan no_surat yang sudah dibuat sebelumnya (bisa NoSKDP
+     * atau NoSuratKontrol, tergantung status rujukan pasien).
+     *
+     * @param noSurat No.SKDP atau No.Surat Kontrol yang baru dibuat
+     * @param tanggal tanggal kontrol (format yyyy-MM-dd)
+     * @param jamAwal jam awal (format HH:mm:ss), dari DlgTanggalJamKontrolCustom.getJamTerpilih()
+     * @param jamAkhir jam akhir (format HH:mm:ss), dari DlgTanggalJamKontrolCustom.getJamAkhirTerpilih()
+     */
+    private void simpanJadwalFisio(String noSurat, String tanggal, String jamAwal) {
+        try {
+            if(Sequel.menyimpantf("jadwal_fisio","?,?,?,?","no_surat",4,new String[]{
+                noSurat,TNoRw.getText(),tanggal,jamAwal
+                })==true){
+                JOptionPane.showMessageDialog(null,"Jadwal Fisioterapi berhasil disimpan...!");
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi simpanJadwalFisio : "+e);
+            JOptionPane.showMessageDialog(null,"Jadwal Fisioterapi gagal disimpan...!");
+        }
+    }
 }
